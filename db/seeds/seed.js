@@ -1,5 +1,14 @@
-const { userData, topicData, articleData } = require("../data/index");
-const { formatArticleData, createReferenceObj } = require("../utils/index");
+const {
+  userData,
+  topicData,
+  articleData,
+  commentData
+} = require("../data/index");
+const {
+  formatArticleData,
+  createReferenceObj,
+  formatCommentData
+} = require("../utils/index");
 
 exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
@@ -23,8 +32,31 @@ exports.seed = function(knex, Promise) {
         "user_id"
       );
       const formattedArticles = formatArticleData(articleData, userRefObj);
-      return knex("articles")
-        .insert(formattedArticles)
+      // const articlesInTable = knex("articles")
+      //   .insert(formattedArticles)
+      //   .returning("*");
+      // return { articlesInTable, userRefObj };
+      return Promise.all([
+        knex("articles")
+          .insert(formattedArticles)
+          .returning("*"),
+        userRefObj
+      ]);
+    })
+    .then(([articlesInTable, userRefObj]) => {
+      const articleRefObj = createReferenceObj(
+        articlesInTable,
+        "title",
+        "article_id"
+      );
+      const formattedComments = formatCommentData(
+        commentData,
+        userRefObj,
+        articleRefObj
+      );
+      console.log(formattedComments);
+      return knex("comments")
+        .insert(formattedComments)
         .returning("*");
     })
     .then(console.log);

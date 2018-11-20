@@ -19,7 +19,7 @@ exports.up = function(knex, Promise) {
       .date("created_at")
       .defaultTo(knex.fn.now(6))
       .notNullable();
-    commentsTable.string("body").notNullable();
+    commentsTable.string("body", 1000).notNullable();
   });
 };
 

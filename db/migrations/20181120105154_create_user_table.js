@@ -1,6 +1,7 @@
 const {} = require("../data/index");
 
 exports.up = function(knex, Promise) {
+  console.log(knex);
   return knex.schema.createTable("users", usersTable => {
     usersTable.increments("user_id").primary();
     usersTable.string("username").notNullable();

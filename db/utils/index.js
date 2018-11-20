@@ -12,6 +12,20 @@ const formatArticleData = (rawArticleData, referenceObj) => {
   });
 };
 
+const formatCommentData = (rawCommentData, userRefObj, articleRefObj) => {
+  return rawCommentData.map(rawDatum => {
+    const { body, belongs_to, created_by, votes, created_at } = rawDatum;
+    const newObj = {
+      created_at: new Date(created_at),
+      user_id: userRefObj[created_by],
+      article_id: articleRefObj[belongs_to],
+      body,
+      votes
+    };
+    return newObj;
+  });
+};
+
 const createReferenceObj = (rows, columnValue, idValue) => {
   return rows.reduce((refObj, row) => {
     refObj[row[columnValue]] = row[idValue];
@@ -19,4 +33,4 @@ const createReferenceObj = (rows, columnValue, idValue) => {
   }, {});
 };
 
-module.exports = { formatArticleData, createReferenceObj };
+module.exports = { formatArticleData, createReferenceObj, formatCommentData };
