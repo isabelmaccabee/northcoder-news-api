@@ -8,7 +8,10 @@
     "lint": "eslint ./",
     "pre-commit": "npm t",
     "posttest": "npm run lint",
-    "knex:init": "knex init"
+    "knex:init": "knex init",
+    "latest": "npx knex migrate:latest",
+    "reSeed": "npx knex seed:run seed",
+    "back": "npx knex migrate:rollback"
   },
   "repository": {
     "type": "git",

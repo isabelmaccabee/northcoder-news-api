@@ -1,3 +1,5 @@
+const {} = require("../data/index");
+
 exports.up = function(knex, Promise) {
   return knex.schema.createTable("users", usersTable => {
     usersTable.increments("user_id").primary();
