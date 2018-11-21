@@ -37,7 +37,7 @@ describe('/api', () => {
         expect(body.message).to.equal('Page not found');
       });
   });
-  it('DELETE, PATCH and PUT / responds with 405 and "Method not valid" error message', () => {
+  it('ERROR: DELETE, PATCH and PUT / responds with 405 and "Method not valid" error message', () => {
     const invalidMethods = ['delete', 'patch', 'put'];
     return Promise.all(
       invalidMethods.map((method) => {
@@ -50,14 +50,60 @@ describe('/api', () => {
     );
   });
   describe('/topics', () => {
+    const topicsURL = '/api/topics';
     it('GET / responds with 200 and all topics', () => {
       return request
-        .get('/api/topics')
+        .get(topicsURL)
         .expect(200)
         .then(({ body }) => {
           expect(body.topics).to.be.an('array');
           expect(body.topics.length).to.equal(2);
-          expect(body.topics[0]).to.have.keys(['slug', 'description']);
+          body.topics.forEach((topic) => {
+            expect(topic).to.have.keys(['slug', 'description']);
+          });
+        });
+    });
+    // it('ERROR: DELETE and PATCH / responds with 405 and "Method not valid" message ', () => {
+    //   const invalidMethodsTopics = ['delete', 'patch'];
+    //   return Promise.all(
+    //     invalidMethodsTopics.map((method) => {
+    //       return request[method](topicsURL)
+    //         .expect(405)
+    //         .then(({ body }) => {
+    //           console.log(body);
+    //           expect(body.message).to.equal('Method not valid on this path');
+    //         });
+    //     })
+    //   );
+    // });
+    // DO ERROR TESTING AND QUERY PARAMS TESTING HERE
+    it('GET /:topic/articles responds with 200 and all articles for specified topic', () => {
+      return request
+        .get(`${topicsURL}/cats/articles`)
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles).to.be.an('array');
+          expect(body.articles.length).to.equal(1);
+          body.articles.forEach((article) => {
+            expect(article).to.have.keys([
+              'author',
+              'title',
+              'article_id',
+              'votes',
+              'comment_count',
+              'created_at',
+              'topic',
+            ]);
+            expect(article).to.eql({
+              author: 'rogersop',
+              title: 'UNCOVERED: catspiracy to bring down democracy',
+              article_id: 4,
+              votes: 0,
+              comment_count: '2',
+              created_at: '2017-12-24T00:00:00.000Z',
+              topic: 'cats',
+            });
+          });
         });
     });
   });
