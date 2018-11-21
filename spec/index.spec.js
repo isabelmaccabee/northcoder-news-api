@@ -63,7 +63,7 @@ describe('/api', () => {
           });
         });
     });
-    it('POST / responsd with 201 and added article with ID', () => {
+    it('POST / responds with 201 and added article with ID', () => {
       const newTopic = {
         slug: 'dogs',
         description: 'All about dogs',
@@ -146,5 +146,21 @@ describe('/api', () => {
           });
         });
     });
+    it('ERROR: /:topic/articles with valid but non-existent param responds w 404 and error msg', () => {
+      return request
+        .get(`${topicsURL}/horses/articles`)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.message).to.equal('Page not found');
+        });
+    });
+    // it('ERROR: /:topic/articles with invalid id reponds w 400 and error msg', () => {
+    //   return request
+    //     .get(`${topicsURL}/123/articles`)
+    //     .expect(400)
+    //     .then(({ body }) => {
+    //       expect(body.message).to.equal('Invalid data type for params');
+    //     });
+    // });
   });
 });

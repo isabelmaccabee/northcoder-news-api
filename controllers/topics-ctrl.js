@@ -1,4 +1,5 @@
 const knex = require('../db/connection');
+const { checkParams } = require('./ctrl_utils/index');
 
 exports.getAllTopics = (req, res, next) => {
   return knex('topics')
@@ -26,6 +27,9 @@ exports.getArticlesByTopic = (req, res, next) => {
     .count('comments.comment_id as comment_count')
     .where('topic', '=', topic)
     .then((articles) => {
+      if (articles.length === 0) {
+        return next({ status: 404, message: 'Page not found' });
+      }
       res.status(200).send({ articles });
     })
     .catch(next);

@@ -1,5 +1,6 @@
 exports.handle400s = (err, req, res, next) => {
-  if (err.code === '23502') {
+  console.log(err);
+  if (err.code === '23502' || err.status === 400) {
     return res
       .status(400)
       .send({ message: 'Malformed request, missing row info' });
