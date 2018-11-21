@@ -2,62 +2,60 @@ const {
   userData,
   topicData,
   articleData,
-  commentData
-} = require("../data/index");
+  commentData,
+} = require('../data/index');
 const {
   formatArticleData,
   createReferenceObj,
-  formatCommentData
-} = require("../utils/index");
+  formatCommentData,
+} = require('../utils/index');
 
-exports.seed = function(knex, Promise) {
+exports.seed = function (knex, Promise) {
   // Deletes ALL existing entries
-  return knex("topics")
+  return knex('topics')
     .del()
     .then(() => {
       // Inserts seed entries
-      return knex("topics")
+      return knex('topics')
         .insert(topicData)
-        .returning("*");
+        .returning('*');
     })
     .then(() => {
-      return knex("users")
+      return knex('users')
         .insert(userData)
-        .returning("*");
+        .returning('*');
     })
-    .then(usersInTable => {
+    .then((usersInTable) => {
       const userRefObj = createReferenceObj(
         usersInTable,
-        "username",
-        "user_id"
+        'username',
+        'user_id',
       );
       const formattedArticles = formatArticleData(articleData, userRefObj);
-      // const articlesInTable = knex("articles")
+      // const articlesInTable = knex('articles')
       //   .insert(formattedArticles)
-      //   .returning("*");
+      //   .returning('*');
       // return { articlesInTable, userRefObj };
       return Promise.all([
-        knex("articles")
+        knex('articles')
           .insert(formattedArticles)
-          .returning("*"),
-        userRefObj
+          .returning('*'),
+        userRefObj,
       ]);
     })
     .then(([articlesInTable, userRefObj]) => {
       const articleRefObj = createReferenceObj(
         articlesInTable,
-        "title",
-        "article_id"
+        'title',
+        'article_id',
       );
       const formattedComments = formatCommentData(
         commentData,
         userRefObj,
-        articleRefObj
+        articleRefObj,
       );
-      console.log(formattedComments);
-      return knex("comments")
+      return knex('comments')
         .insert(formattedComments)
-        .returning("*");
-    })
-    .then(console.log);
+        .returning('*');
+    });
 };

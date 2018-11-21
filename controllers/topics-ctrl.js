@@ -1,9 +1,9 @@
-const knex = require("../db/connection");
+const knex = require('../db/connection');
 
 exports.getAllTopics = (req, res, next) => {
-  return knex("topics")
+  return knex('topics')
     .select()
-    .then(topics => {
+    .then((topics) => {
       res.send({ topics });
     })
     .catch(next);

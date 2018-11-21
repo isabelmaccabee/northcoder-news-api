@@ -7,6 +7,8 @@
     "test": "mocha spec/index.spec.js",
     "pre-commit": "npm t",
     "knex:init": "knex init",
+    "lint": "eslint ./",
+    "posttest": "npm run lint",
     "latest": "npx knex migrate:latest",
     "reSeed": "npx knex seed:run seed",
     "back": "npx knex migrate:rollback",
@@ -26,6 +28,8 @@
   "homepage": "https://github.com/northcoders/BE2-NC-Knews#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
     "express": "^4.16.4",
     "knex": "^0.15.2",
     "pg": "^7.6.1"

@@ -1,26 +1,30 @@
 const formatArticleData = (rawArticleData, referenceObj) => {
-  return rawArticleData.map(rawDatum => {
-    const { title, topic, created_by, body, created_at } = rawDatum;
+  return rawArticleData.map((rawDatum) => {
+    const {
+      title, topic, created_by, body, created_at,
+    } = rawDatum;
     const newObj = {
       title,
       topic,
       body,
       created_at: new Date(created_at),
-      user_id: referenceObj[created_by]
+      user_id: referenceObj[created_by],
     };
     return newObj;
   });
 };
 
 const formatCommentData = (rawCommentData, userRefObj, articleRefObj) => {
-  return rawCommentData.map(rawDatum => {
-    const { body, belongs_to, created_by, votes, created_at } = rawDatum;
+  return rawCommentData.map((rawDatum) => {
+    const {
+      body, belongs_to, created_by, votes, created_at,
+    } = rawDatum;
     const newObj = {
       created_at: new Date(created_at),
       user_id: userRefObj[created_by],
       article_id: articleRefObj[belongs_to],
       body,
-      votes
+      votes,
     };
     return newObj;
   });
