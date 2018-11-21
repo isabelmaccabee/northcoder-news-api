@@ -1,19 +1,16 @@
 const app = require('express')();
 const bodyParser = require('body-parser');
 const apiRouter = require('./routes/api-router');
+const { handle404s, handle500s } = require('./errors');
 
 app.use(bodyParser.json());
 
 app.use('/api', apiRouter);
 
 app.use('/*', (req, res, next) => {
-  next({ err: 404, message: 'Page not found' });
+  next({ status: 404, message: 'Page not found' });
 });
 
-app.use((err, req, res, next) => {
-  console.log(err);
-  if (err) return res.status(err.err).send({ message: err.message });
-  res.status(500).send({ message: 'Internal server error sorry' });
-});
-
+app.use(handle404s);
+app.use(handle500s);
 module.exports = app;

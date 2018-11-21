@@ -15,13 +15,41 @@ describe('/api', () => {
       })
       .then(() => {
         return connection.seed.run();
-      })
-      .then(() => console.log('seed success....'));
+      });
   });
-  afterEach(() => {
+  after(() => {
     return connection.destroy();
   });
-  describe('/topic', () => {
+  const apiUrl = '/api';
+  it('GET / responds with 200 and welcome message', () => {
+    return request
+      .get(apiUrl)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.message).to.equal('Welcome to the nc_knews homepage');
+      });
+  });
+  it('GET /* responds with 404 and "Page not found" error message', () => {
+    return request
+      .get('/ap/')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).to.equal('Page not found');
+      });
+  });
+  it('DELETE, PATCH and PUT / responds with 405 and "Method not valid" error message', () => {
+    const invalidMethods = ['delete', 'patch', 'put'];
+    return Promise.all(
+      invalidMethods.map((method) => {
+        return request[method](apiUrl)
+          .expect(405)
+          .then(({ body }) => {
+            expect(body.message).to.equal('Method not valid on this path');
+          });
+      })
+    );
+  });
+  describe('/topics', () => {
     it('GET / responds with 200 and all topics', () => {
       return request
         .get('/api/topics')
