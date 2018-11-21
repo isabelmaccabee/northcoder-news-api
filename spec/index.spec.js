@@ -63,20 +63,60 @@ describe('/api', () => {
           });
         });
     });
-    // it('ERROR: DELETE and PATCH / responds with 405 and "Method not valid" message ', () => {
-    //   const invalidMethodsTopics = ['delete', 'patch'];
-    //   return Promise.all(
-    //     invalidMethodsTopics.map((method) => {
-    //       return request[method](topicsURL)
-    //         .expect(405)
-    //         .then(({ body }) => {
-    //           console.log(body);
-    //           expect(body.message).to.equal('Method not valid on this path');
-    //         });
-    //     })
-    //   );
-    // });
-    // DO ERROR TESTING AND QUERY PARAMS TESTING HERE
+    it('POST / responsd with 201 and added article with ID', () => {
+      const newTopic = {
+        slug: 'dogs',
+        description: 'All about dogs',
+      };
+      return request
+        .post(topicsURL)
+        .send(newTopic)
+        .expect(201)
+        .then(({ body }) => {
+          expect(body.topic).to.have.keys(['slug', 'description']);
+        });
+    });
+    it('ERROR: Malformed post request (null for column values) responds with 400 and error message', () => {
+      const badTopic = {
+        slug: 'dogs',
+      };
+      return request
+        .post(topicsURL)
+        .send(badTopic)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.message).to.equal('Malformed request, missing row info');
+        });
+    });
+    it('ERROR: Non-unique slug responds with 422 and correct error message', () => {
+      const badTopic = {
+        slug: 'cats',
+        description: 'All about cats!',
+      };
+      return request
+        .post(topicsURL)
+        .send(badTopic)
+        .expect(422)
+        .then(({ body }) => {
+          expect(body.message).to.equal(
+            'Unprocessable entity: non-unique slug'
+          );
+        });
+    });
+    // it('ERROR: Non-unique slug blah blah balh 422');
+    it('ERROR: DELETE and PATCH / responds with 405 and "Method not valid" message ', () => {
+      const invalidMethodsTopics = ['delete', 'patch'];
+      return Promise.all(
+        invalidMethodsTopics.map((method) => {
+          return request[method](topicsURL)
+            .expect(405)
+            .then(({ body }) => {
+              expect(body.message).to.equal('Method not valid on this path');
+            });
+        })
+      );
+    });
+    // DO QUERY PARAMS TESTING HERE
     it('GET /:topic/articles responds with 200 and all articles for specified topic', () => {
       return request
         .get(`${topicsURL}/cats/articles`)

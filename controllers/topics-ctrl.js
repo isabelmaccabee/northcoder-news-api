@@ -27,15 +27,16 @@ exports.getArticlesByTopic = (req, res, next) => {
     .where('topic', '=', topic)
     .then((articles) => {
       res.status(200).send({ articles });
-    });
+    })
+    .catch(next);
 };
 
-// .where('topic', '=', topic), knex('comments').count('comment_id').where('comments.article_id', '=', '
-
-// 'username AS author',
-//   'articles.title',
-//   'articles.article_id',
-//   'articles.votes',
-//   'articles.created_at',
-//   'topic',
-//   'count';
+exports.postOneTopic = (req, res, next) => {
+  return knex('topics')
+    .insert(req.body)
+    .returning('*')
+    .then((topic) => {
+      res.status(201).send({ topic: topic[0] });
+    })
+    .catch(next);
+};
