@@ -54,6 +54,7 @@ exports.updateArticleById = (req, res, next) => {
     .where('article_id', '=', req.params.article_id)
     .returning('*')
     .then((article) => {
+      if (article.length === 0) return next({ status: 404 });
       res.send({ article: article[0] });
     });
 };

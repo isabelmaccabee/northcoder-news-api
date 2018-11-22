@@ -319,7 +319,7 @@ describe('/api', () => {
           ])      
         });
       });
-      it('PATCH /:article_id responds w 200 and updated info', () => {
+      it('PATCH /:article_id responds w 200 and updated info (positive int)', () => {
         const increaseVotes = {
           inc_votes: 2
         };
@@ -327,7 +327,7 @@ describe('/api', () => {
           expect(body.article.votes).to.equal(2);
         })
       });      
-      it('PATCH /:article_id responds w 200 and updated info', () => {
+      it('PATCH /:article_id responds w 200 and updated info (negative int)', () => {
         const increaseVotes = {
           inc_votes: -10
         };
@@ -336,6 +336,14 @@ describe('/api', () => {
           expect(body.article.votes).to.equal(-10);
         })
       });
+      it('ERROR: PATCH /:article_id with valid but non-existent id responds with 404 and err msg', () => {
+        const increaseVotes = {
+          inc_votes: 2
+        };
+        return request.patch(`${articlesURL}/20`).send(increaseVotes).expect(404).then(({ body }) => {
+          expect(body.message).to.equal('Page not found.');
+        })
+      })
       it('ERROR: GET, PATCH or DELETE /:article_id with invalid id type in params gives 400 and err msg', () => {
         const validMethods = ['get', 'patch', 'delete'];
         return Promise.all(validMethods.map((method) => {
