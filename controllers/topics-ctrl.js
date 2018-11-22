@@ -56,12 +56,21 @@ exports.getArticlesByTopic = (req, res, next) => {
     .catch(next);
 };
 
-exports.postOneTopic = (req, res, next) => {
-  knex('topics')
-    .insert(req.body)
+exports.postOneTopic = (req, res, next) => knex('topics')
+  .insert(req.body)
+  .returning('*')
+  .then((topic) => {
+    res.status(201).send({ topic: topic[0] });
+  })
+  .catch(next);
+
+exports.postOneArticle = (req, res, next) => {
+  const newArticle = { topic: req.params.topic, ...req.body };
+  return knex('articles')
+    .insert(newArticle)
     .returning('*')
-    .then((topic) => {
-      res.status(201).send({ topic: topic[0] });
+    .then((article) => {
+      res.status(201).send({ article: article[0] });
     })
     .catch(next);
 };

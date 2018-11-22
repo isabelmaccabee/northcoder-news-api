@@ -1,6 +1,25 @@
-// const articlesRouter = require('express').Router();
-// const { getAllArticles } = require('../controllers/articles-ctrl');
+const articlesRouter = require('express').Router();
+const {
+  getAllArticles,
+  getOneArticleById,
+  updateArticleById,
+} = require('../controllers/articles-ctrl');
+const { handle405s } = require('../errors');
 
-// articlesRouter.get('/', getAllArticles);
+articlesRouter.param('article_id', (req, res, next) => {
+  if (/\d/.test(req.params.article_id)) return next();
+  next({ status: 400 });
+});
 
-// module.exports = articlesRouter;
+articlesRouter
+  .route('/')
+  .get(getAllArticles)
+  .all(handle405s);
+
+articlesRouter
+  .route('/:article_id')
+  .get(getOneArticleById)
+  .patch(updateArticleById)
+  .all(handle405s);
+
+module.exports = articlesRouter;
