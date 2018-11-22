@@ -353,12 +353,6 @@ describe('/api', () => {
         }));
       });
       it('ERROR: GET /:article_id with valid but non-existent id in params gives 404 and err msg', () => {
-        // const validMethods = ['get', 'patch', 'delete'];
-        // return Promise.all(validMethods.map((method) => {
-        //   request[method](`${articlesURL}/20`).expect(404).then(({body}) => {
-        //     expect(body.message).to.equal('Page not found.')
-        //   })
-        // }));
         return request.get(`${articlesURL}/20`).expect(404).then(({ body }) => {
           expect(body.message).to.equal('Page not found.');
         })
