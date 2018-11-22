@@ -8,6 +8,7 @@
     "pre-commit": "npm t",
     "knex:init": "knex init",
     "lint": "eslint ./",
+    "lint:fix": "eslint ./ --fix",
     "posttest": "npm run lint",
     "latest": "npx knex migrate:latest",
     "reSeed": "npx knex seed:run seed",

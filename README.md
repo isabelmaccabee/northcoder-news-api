@@ -63,13 +63,13 @@ TODO: topic slugs should be unique, so they act as the primary keys in this tabl
 Your server should have the following end-points:
 
 ```http
-GET /api/topics <------ 200
+GET /api/topics <------
 ```
 
 - responds with an array of topic objects - each object should have a `slug` and `description` property.
 
 ```http
-POST /api/topics <--------- 201, 400, 422, 405
+POST /api/topics <-------
 ```
 
 - accepts an object containing `slug` and `description` property, the `slug` must be unique

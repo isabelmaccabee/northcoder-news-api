@@ -1,5 +1,5 @@
 exports.handle400s = (err, req, res, next) => {
-  console.log(err);
+  // console.log(err);
   if (err.code === '23502' || err.status === 400) {
     return res
       .status(400)
@@ -15,9 +15,7 @@ exports.handle404s = (err, req, res, next) => {
   next(err);
 };
 
-exports.handle405s = (req, res, next) => {
-  return res.status(405).send({ message: 'Method not valid on this path' });
-};
+exports.handle405s = (req, res, next) => res.status(405).send({ message: 'Method not valid on this path' });
 
 exports.handle422s = (err, req, res, next) => {
   if (err.code === '23505') {
@@ -28,6 +26,4 @@ exports.handle422s = (err, req, res, next) => {
   next(err);
 };
 
-exports.handle500s = (err, req, res, next) => {
-  return res.status(500).send({ message: 'Internal server error' });
-};
+exports.handle500s = (err, req, res, next) => res.status(500).send({ message: 'Internal server error' });

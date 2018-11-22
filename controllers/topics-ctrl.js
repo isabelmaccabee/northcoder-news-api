@@ -1,8 +1,8 @@
 const knex = require('../db/connection');
-const { checkParams } = require('./ctrl_utils/index');
+const { checkParams, validateQueries } = require('./ctrl_utils/index');
 
 exports.getAllTopics = (req, res, next) => {
-  return knex('topics')
+  knex('topics')
     .select()
     .then((topics) => {
       res.send({ topics });
@@ -12,6 +12,23 @@ exports.getAllTopics = (req, res, next) => {
 
 exports.getArticlesByTopic = (req, res, next) => {
   const { topic } = req.params;
+  const {
+    limit = 10,
+    sort_ascending = 'false',
+    sort_by = 'created_at',
+    p = '1',
+    ...rawQueries
+  } = req.query;
+  const offsetAmount = limit * (p - 1);
+  const sortDirectionObj = { false: 'desc', true: 'asc' };
+  const validatedQueries = validateQueries(
+    rawQueries,
+    'title',
+    'votes',
+    'author',
+    'created_at',
+    // add to
+  );
   return knex('articles')
     .select(
       'articles.title',
@@ -19,14 +36,18 @@ exports.getArticlesByTopic = (req, res, next) => {
       'users.username as author',
       'articles.created_at',
       'articles.article_id',
-      'articles.topic'
+      'articles.topic',
     )
     .join('users', 'users.user_id', '=', 'articles.user_id')
-    .join('comments', 'comments.article_id', '=', 'articles.article_id')
+    .leftJoin('comments', 'comments.article_id', '=', 'articles.article_id')
     .groupBy('articles.article_id', 'users.username')
+    .orderBy(sort_by, sortDirectionObj[sort_ascending])
     .count('comments.comment_id as comment_count')
+    .limit(limit)
+    .offset(offsetAmount)
     .where('topic', '=', topic)
     .then((articles) => {
+      // console.log(articles);
       if (articles.length === 0) {
         return next({ status: 404, message: 'Page not found' });
       }
@@ -36,7 +57,7 @@ exports.getArticlesByTopic = (req, res, next) => {
 };
 
 exports.postOneTopic = (req, res, next) => {
-  return knex('topics')
+  knex('topics')
     .insert(req.body)
     .returning('*')
     .then((topic) => {

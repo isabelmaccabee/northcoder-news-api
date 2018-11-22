@@ -4,7 +4,7 @@ module.exports = [
     topic: 'mitch',
     created_by: 'butter_bridge',
     body: 'I find this existence challenging',
-    created_at: 1542284514171,
+    created_at: 1542284514171 + 86000000,
     votes: 100,
   },
   {
@@ -32,7 +32,8 @@ module.exports = [
     title: 'Student SUES Mitch!',
     topic: 'mitch',
     created_by: 'rogersop',
-    body: 'We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages',
+    body:
+      'We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages',
     created_at: 1514093931242,
   },
   {
@@ -46,7 +47,8 @@ module.exports = [
     title: 'Does Mitch predate civilisation?',
     topic: 'mitch',
     created_by: 'icellusedkars',
-    body: 'Archaeologists have uncovered a gigantic statue from the dawn of humanity, and it has an uncanny resemblance to Mitch. Surely I am not the only person who can see this?!',
+    body:
+      'Archaeologists have uncovered a gigantic statue from the dawn of humanity, and it has an uncanny resemblance to Mitch. Surely I am not the only person who can see this?!',
     created_at: 1513093931243,
   },
   {
@@ -67,8 +69,9 @@ module.exports = [
     title: 'Am I a cat?',
     topic: 'mitch',
     created_by: 'icellusedkars',
-    body: 'Having run out of ideas for articles, I am staring at the wall blankly, like a cat. Does this make me a cat?',
-    created_at: 2,
+    body:
+      'Having run out of ideas for articles, I am staring at the wall blankly, like a cat. Does this make me a cat?',
+    created_at: 86400001,
   },
   {
     title: 'Moustache',
@@ -81,7 +84,10 @@ module.exports = [
     title: 'Sony Vaio; or, The Laptop',
     topic: 'mitch',
     created_by: 'icellusedkars',
-    body: 'Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me.',
+    body:
+      'Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me.',
     created_at: 1542284514169,
   },
 ];
+
+// 1542284514171
