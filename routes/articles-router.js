@@ -7,6 +7,7 @@ const {
   getCommentsByArticleId,
   postCommentByArticleId,
   updateCommentByArticleAndCommentId,
+  deleteCommentByArticleAndCommentId,
 } = require('../controllers/articles-ctrl');
 const { handle405s } = require('../errors');
 
@@ -23,6 +24,7 @@ articlesRouter
 articlesRouter
   .route('/:article_id/comments/:comment_id')
   .patch(updateCommentByArticleAndCommentId)
+  .delete(deleteCommentByArticleAndCommentId)
   .all(handle405s);
 
 articlesRouter

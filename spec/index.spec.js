@@ -459,7 +459,6 @@ describe('/api', () => {
         it('QUERIES: GET /:article_id/comments responds w 200 and correct no, of comments when limit specified', () => {
           return request.get(`${articlesURL}/1/comments?limit=13`).expect(200).then(({ body }) => {
             expect(body.comments.length).to.equal(13);
-
           });
         });
         it('QUERIES: GET /:article_id/comments responds with 200 and ordered by specific column when sort_by specified ', () => {
@@ -515,6 +514,23 @@ describe('/api', () => {
               expect(body.message).to.equal('Page not found.')
             }); 
           });
+          it('DELETE /:comment_id responds with 200 and empty obj', () => {
+            return request.delete(`${articlesURL}/1/comments/1`).expect(200).then(({ body }) => {
+              expect(body.comment).to.be.an('object');
+              expect(Object.keys(body.comment).length).to.equal(0);
+            }).then(() => {
+              return request.get(`${articlesURL}/1/comments`).expect(200).then(({ body }) => {
+                body.comments.forEach((comment) => {
+                  expect(comment.comment_id).to.not.equal(1)
+                })
+              });
+            });
+          });
+          it('ERROR: DELETE /:comment_id with valid but non-existent id responds with 404 and err msg', () => {
+            return request.delete(`${articlesURL}/1/comments/20`).expect(404).then(({body}) => {
+              expect(body.message).to.equal('Page not found.')
+            })
+          }); 
           it('ERROR: GET, POST and PUT on /:comment_id responds w 405 and err msg', () => {
             const invalidMethods = ['get', 'post', 'put'];
             return Promise.all(
