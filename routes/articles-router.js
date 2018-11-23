@@ -5,6 +5,7 @@ const {
   updateArticleById,
   deleteArticleById,
   getCommentsByArticleId,
+  postCommentByArticleId,
 } = require('../controllers/articles-ctrl');
 const { handle405s } = require('../errors');
 
@@ -18,7 +19,11 @@ articlesRouter
   .get(getAllArticles)
   .all(handle405s);
 
-articlesRouter.route('/:article_id/comments').get(getCommentsByArticleId);
+articlesRouter
+  .route('/:article_id/comments')
+  .get(getCommentsByArticleId)
+  .post(postCommentByArticleId)
+  .all(handle405s);
 
 articlesRouter
   .route('/:article_id')

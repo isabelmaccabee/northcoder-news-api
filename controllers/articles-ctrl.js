@@ -88,5 +88,17 @@ exports.getCommentsByArticleId = (req, res, next) => {
     .then((comments) => {
       // console.log(comments);
       res.status(200).send({ comments });
-    });
+    })
+    .catch(next);
+};
+
+exports.postCommentByArticleId = (req, res, next) => {
+  const newComment = { article_id: req.params.article_id, ...req.body };
+  return knex('comments')
+    .insert(newComment)
+    .returning('*')
+    .then((comment) => {
+      res.status(201).send({ comment: comment[0] });
+    })
+    .catch(next);
 };
