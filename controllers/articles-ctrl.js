@@ -71,3 +71,16 @@ exports.deleteArticleById = (req, res, next) => knex('articles')
     if (deletedUser.length === 0) return next({ status: 404 });
     res.status(200).send({ user: {} });
   });
+
+exports.getCommentsByArticleId = (req, res, next) => {
+  const { results = 10 } = req.query;
+  return knex('comments')
+    .join('users', 'users.user_id', '=', 'comments.user_id')
+    .select('comment_id', 'votes', 'users.username AS author', 'body', 'created_at')
+    .where('article_id', '=', req.params.article_id)
+    .limit(results)
+    .then((comments) => {
+      console.log(comments);
+      res.status(200).send({ comments });
+    });
+};

@@ -418,29 +418,39 @@ describe('/api', () => {
       });
       // Could return to check comments deleted too
       it('DELETE /:article_id responds with 200 and empty object', () => {
-        return request.delete(`${articlesURL}/1`).expect(200).then(({body}) => {
+        return request.delete(`${articlesURL}/1`).expect(200).then(({ body }) => {
           expect(body.user).to.be.an('object');
           expect(Object.keys(body.user).length).to.equal(0);
         }).then(() => {
-          return request.get(`${articlesURL}/1`).expect(404).then(({body}) => {
+          return request.get(`${articlesURL}/1`).expect(404).then(({ body }) => {
             expect(body.message).to.equal('Page not found.')
           })
         });
       });
       it('ERROR: DELETE /:article_id on valid but non-existent responds with 404 and err msg', () => {
-        return request.delete(`${articlesURL}/20`).expect(404).then(({body}) => {
+        return request.delete(`${articlesURL}/20`).expect(404).then(({ body }) => {
           expect(body.message).to.equal('Page not found.');
         });
       });
       it('ERROR: DELETE /:article_id with invalid id type responds w 400 and err msg', () => {
-        return request.delete(`${articlesURL}/helloworld`).expect(400).then(({body}) => {
-          expect(body.message).to.equal('Invalid data type.')
+        return request.delete(`${articlesURL}/helloworld`).expect(400).then(({ body }) => {
+          expect(body.message).to.equal('Invalid data type.');
+        });
+      });
+      describe('/comments', () => {
+        it('GET /:article_id/comments responds w 200 and comments for specified id, with defaults specified', () => {
+          return request.get(`${articlesURL}/1/comments`).expect(200).then(({ body }) => {
+            expect(body.comments).to.be.an('array');
+            expect(body.comments.length).to.equal(10);
+            // expect(body.comments[0].comment_id).to.equal('?????')
+            body.comments.forEach((comment) => {
+              expect(comment).to.have.keys(['comment_id', 'votes', 'author', 'body', 'created_at'])
+              expect(comment.author).to.be.a('string')
+            })
+          });
         });
       });
     });
-    describe('afdasdasd', () => {
-
-    })
   });
   describe('/users', () => {
     const usersURL = '/api/users';
