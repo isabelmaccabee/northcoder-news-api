@@ -442,13 +442,38 @@ describe('/api', () => {
           return request.get(`${articlesURL}/1/comments`).expect(200).then(({ body }) => {
             expect(body.comments).to.be.an('array');
             expect(body.comments.length).to.equal(10);
-            // expect(body.comments[0].comment_id).to.equal('?????')
+            expect(body.comments[0].comment_id).to.equal(14);
             body.comments.forEach((comment) => {
               expect(comment).to.have.keys(['comment_id', 'votes', 'author', 'body', 'created_at'])
               expect(comment.author).to.be.a('string')
             })
           });
         });
+        it('QUERIES: GET /:article_id/comments responds w 200 and comments when sort_ascending specified to true', () => {
+          return request.get(`${articlesURL}/1/comments?sort_ascending=true`).expect(200).then(({ body }) => {
+            expect(body.comments[0].comment_id).to.equal(15);
+            expect(body.comments[2].created_at).to.equal('2017-06-02T23:00:00.000Z')
+            // Can't test for other ones ebcause all are same date
+          });
+        });
+        it('QUERIES: GET /:article_id/comments responds w 200 and correct no, of comments when limit specified', () => {
+          return request.get(`${articlesURL}/1/comments?limit=13`).expect(200).then(({ body }) => {
+            expect(body.comments.length).to.equal(13);
+
+          });
+        });
+        it('QUERIES: GET /:article_id/comments responds with 200 and ordered by specific column when sort_by specified ', () => {
+          return request.get(`${articlesURL}/1/comments?sort_by=votes`).expect(200).then(({ body }) => {
+            expect(body.comments[0].comment_id).to.equal(1);
+            // expect(body.comments[9].comment_id).to.equal()
+          });
+        });
+        it('QUERIES: GET /:article_id/comments responds with 200 and p is specified', () => {
+          return request.get(`${articlesURL}/1/comments?p=2`).expect(200).then(({body}) => {
+            expect(body.comments.length).to.equal(3);
+            expect(body.comments[2].comment_id).to.equal(15)
+          })
+        })
       });
     });
   });

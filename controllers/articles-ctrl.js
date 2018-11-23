@@ -73,12 +73,18 @@ exports.deleteArticleById = (req, res, next) => knex('articles')
   });
 
 exports.getCommentsByArticleId = (req, res, next) => {
-  const { results = 10 } = req.query;
+  const {
+    limit = 10, sort_ascending = false, sort_by = 'created_at', p = 1,
+  } = req.query;
+  const sortDirectionObj = { false: 'desc', true: 'asc' };
+  const offsetAmount = limit * (p - 1);
   return knex('comments')
     .join('users', 'users.user_id', '=', 'comments.user_id')
     .select('comment_id', 'votes', 'users.username AS author', 'body', 'created_at')
     .where('article_id', '=', req.params.article_id)
-    .limit(results)
+    .limit(limit)
+    .orderBy(sort_by, sortDirectionObj[sort_ascending])
+    .offset(offsetAmount)
     .then((comments) => {
       // console.log(comments);
       res.status(200).send({ comments });
