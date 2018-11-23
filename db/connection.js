@@ -16,6 +16,6 @@ const config = ENV === 'production'
   ? { client: 'pg', connection: `${process.env.DB_URL}?ssl=true` }
   : require('../knexfile')[ENV];
 
-console.log(process.env.DB_URL);
+console.log('*****', process.env.DB_URL);
 
 module.exports = require('knex')(config);
