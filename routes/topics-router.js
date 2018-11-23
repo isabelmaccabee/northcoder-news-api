@@ -8,9 +8,7 @@ const {
 const { handle405s } = require('../errors');
 
 topicsRouter.param('topic', (req, res, next, topic) => {
-  // console.log(typeof req.params.topic);
   if (typeof req.params.topic === 'string') return next();
-  // console.log('bad request');
   next({ status: 400, message: 'Bad request' });
 });
 

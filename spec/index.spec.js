@@ -17,7 +17,11 @@ describe('/api', () => {
     .get(apiUrl)
     .expect(200)
     .then(({ body }) => {
-      expect(body.message).to.equal('Welcome to the nc_knews homepage');
+      expect(body.endpoints).to.be.an('object');
+      expect(body.endpoints).to.have.keys(['/api/topics', '/api/topics/:topic/articles', '/api/articles', '/api/articles/:article_id', '/api/articles/:article_id/comments', '/api/articles/:article_id/comments/:comment_id', '/api/users', '/api/users/:username'])
+      for (let endpoint in body.endpoints) {
+        expect(body.endpoints[endpoint]).to.have.keys(['methods', 'description'])
+      }
     }));
   it('GET /* responds with 404 and "Page not found" error message', () => request
     .get('/ap/')
@@ -272,7 +276,6 @@ describe('/api', () => {
       .get(`${articlesURL}?limit=15`)
       .expect(200)
       .then(({ body }) => {
-        // console.log(body)
         expect(body.articles.length).to.equal(12);
       }));
     it('QUERIES: GET / responds w 200 and correct direction of results if sort_ascending specified', () => request

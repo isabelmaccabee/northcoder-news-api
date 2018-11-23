@@ -47,7 +47,6 @@ exports.getArticlesByTopic = (req, res, next) => {
     .offset(offsetAmount)
     .where('topic', '=', topic)
     .then((articles) => {
-      // console.log(articles);
       if (articles.length === 0) {
         return next({ status: 404, message: 'Page not found' });
       }
