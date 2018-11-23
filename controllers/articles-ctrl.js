@@ -80,7 +80,7 @@ exports.getCommentsByArticleId = (req, res, next) => {
     .where('article_id', '=', req.params.article_id)
     .limit(results)
     .then((comments) => {
-      console.log(comments);
+      // console.log(comments);
       res.status(200).send({ comments });
     });
 };

@@ -99,14 +99,14 @@ describe('/api', () => {
     });
     describe('/:topics/articles', () => {
       it('GET /:topic/articles responds w 200 and all articles for specified topic, with default queries (limit = 10,sorted-by=date, order=desc,p=1)', () => {
-        request
+        return request
           .get(`${topicsURL}/mitch/articles`)
           .expect(200)
           .then(({ body }) => {
             expect(body.articles).to.be.an('array');
             expect(body.articles.length).to.equal(10);
             expect(body.articles[0].article_id).to.equal(1);
-            expect(body.articles[9].article_id).to.equal(10);
+            expect(body.articles[9].article_id).to.equal(11);
             body.articles.forEach((article) => {
               expect(article).to.have.keys([
                 'author',
@@ -147,32 +147,32 @@ describe('/api', () => {
           .then(({ body }) => {
             expect(body.articles.length).to.equal(5);
             expect(body.articles[0].article_id).to.equal(1);
-            expect(body.articles[4].article_id).to.equal(5);
+            expect(body.articles[4].article_id).to.equal(6);
           });
       });
       it('QUERIES: GET /:topic/articles responds with 200 and correct sort order if direction specified', () => {
-        request
+        return request
           .get(`${topicsURL}/mitch/articles?sort_ascending=true`)
           .expect(200)
           .then(({ body }) => {
-            expect(body.articles[0].article_id).to.equal(11);
-            expect(body.articles[9].article_id).to.equal(12);
+            expect(body.articles[0].article_id).to.equal(12); // or 3
+            expect(body.articles[9].article_id).to.equal(2);
           });
       });
       it('QUERIES: GET /:topic/articles responds w 200 and correct items when page is specified', () => request
         .get(`${topicsURL}/mitch/articles?p=2`)
         .expect(200)
         .then(({ body }) => {
-          expect(body.articles[0].article_id).to.equal(11);
+          expect(body.articles[0].article_id).to.equal(12);
         }));
       // BELOW NEEDS WORK
       it('QUERIES: GET /:topic/articles responds with 200 and correct sort criteria if sort_by specified (and default is desc)', () => {
-        request
+        return request
           .get(`${topicsURL}/mitch/articles?sort_by=title`)
           .expect(200)
           .then(({ body }) => {
-            expect(body.articles[0].article_id).to.equal(8); // Title = 'Z' bc default is desc
-            expect(body.articles[9].article_id).to.equal(10); // Article with title = 'A' spills
+            expect(body.articles[0].article_id).to.equal(7); // Title = 'Z' bc default is desc
+            expect(body.articles[9].article_id).to.equal(11); // Article with title = 'A' spills
           });
       });
       it('ERROR: GET /:topic/articles with valid but non-existent param responds w 404 and error msg', () => {
@@ -248,14 +248,14 @@ describe('/api', () => {
   });
   describe('/articles', () => {
     const articlesURL = '/api/articles';
-    it('GET / responds with 200 and all articles', () => request
+    it('GET / responds with 200 and all articles with default query params', () => request
       .get(articlesURL)
       .expect(200)
       .then(({ body }) => {
         expect(body.articles).to.be.an('array');
         expect(body.articles.length).to.equal(10);
-        expect(body.articles[3].topic).to.equal('cats');
-        expect(body.articles[2].topic).to.equal('mitch');
+        expect(body.articles[3].topic).to.equal('mitch');
+        expect(body.articles[4].topic).to.equal('cats');
         body.articles.forEach((article) => {
           expect(article).to.have.keys([
             'author',
@@ -279,22 +279,22 @@ describe('/api', () => {
       .get(`${articlesURL}?sort_ascending=true`)
       .expect(200)
       .then(({ body }) => {
-        expect(body.articles[0].article_id).to.equal(11);
-        expect(body.articles[9].article_id).to.equal(4);
+        expect(body.articles[0].article_id).to.equal(12);
+        expect(body.articles[9].article_id).to.equal(3);
       }));
     it('QUERIES: GET / responds w 200 and correct start value if p specified', () => request
       .get(`${articlesURL}?p=2`)
       .expect(200)
       .then(({ body }) => {
-        expect(body.articles[0].article_id).to.equal(10);
+        expect(body.articles[0].article_id).to.equal(11);
       }));
-    it('QUERIES: GET /:topic/articles responds with 200 and correct sort criteria if sort_by specified (and default is desc)', () => {
-      request
+    it('QUERIES: GET /articles responds with 200 and correct sort criteria if sort_by specified (and default is desc)', () => {
+      return request
         .get(`${articlesURL}?sort_by=title`)
         .expect(200)
         .then(({ body }) => {
-          expect(body.articles[0].article_id).to.equal(8); // Title = 'Z' bc default is desc
-          expect(body.articles[9].article_id).to.equal(7); // Articles starting w 'A' and 'Am' spill to next page
+          expect(body.articles[0].article_id).to.equal(7); // Title = 'Z' bc default is desc
+          expect(body.articles[9].article_id).to.equal(8); // Articles starting w 'A' and 'Am' spill to next page
         });
     });
     it('ERROR: DELETE, PATCH and PUT on / responds w 405 and "Method not valid" message', () => {
