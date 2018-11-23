@@ -1,6 +1,8 @@
 /* eslint "no-console" : 0 */
 const app = require('./app');
 
-app.listen(9090, () => {
+const { PORT = 9090 } = process.env;
+
+app.listen(PORT, () => {
   console.log('i am listening on 9090...');
 });

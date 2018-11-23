@@ -16,6 +16,11 @@ articlesRouter.param('article_id', (req, res, next) => {
   next({ status: 400 });
 });
 
+articlesRouter.param('comment_id', (req, res, next) => {
+  if (/\d/.test(req.params.comment_id)) return next();
+  next({ status: 400 });
+});
+
 articlesRouter
   .route('/')
   .get(getAllArticles)

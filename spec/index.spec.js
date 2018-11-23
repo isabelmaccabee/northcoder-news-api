@@ -514,6 +514,26 @@ describe('/api', () => {
               expect(body.message).to.equal('Page not found.')
             }); 
           });
+          it('ERROR: PATCH /:comment_id responds with invalid id gives 400 and err msg ', () => {
+            const upByOne = {
+              inc_votes: 1,
+            };
+            return request.patch(`${articlesURL}/1/comments/helloworld`).expect(400).then(({ body }) => {
+              expect(body.message).to.equal('Invalid data type.')
+            }); 
+          })
+          it('ERROR: PATCH /:comment_id with malformed body responds w 400 and err msg', () => {
+            const increaseVotes = {
+              inc_votes: 'increase by one please',
+            };
+            return request
+              .patch(`${articlesURL}/1/comments/1`)
+              .send(increaseVotes)
+              .expect(400)
+              .then(({ body }) => {
+                expect(body.message).to.equal('Invalid data type.');
+              });
+          });
           it('DELETE /:comment_id responds with 200 and empty obj', () => {
             return request.delete(`${articlesURL}/1/comments/1`).expect(200).then(({ body }) => {
               expect(body.comment).to.be.an('object');
@@ -530,7 +550,12 @@ describe('/api', () => {
             return request.delete(`${articlesURL}/1/comments/20`).expect(404).then(({body}) => {
               expect(body.message).to.equal('Page not found.')
             })
-          }); 
+          });
+          it('ERROR: DELETE /:comment_id with invalid id type responds w 400 and err msg', () => {
+            return request.delete(`${articlesURL}/1/comments/helloworld`).expect(400).then(({ body }) => {
+              expect(body.message).to.equal('Invalid data type.');
+            });
+          });
           it('ERROR: GET, POST and PUT on /:comment_id responds w 405 and err msg', () => {
             const invalidMethods = ['get', 'post', 'put'];
             return Promise.all(

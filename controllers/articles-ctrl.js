@@ -119,14 +119,11 @@ exports.updateCommentByArticleAndCommentId = (req, res, next) => {
 
 // could make into utils function
 
-exports.deleteCommentByArticleAndCommentId = (req, res, next) => {
-  console.log('tryna delete for u');
-  return knex('comments')
-    .where('comment_id', '=', req.params.comment_id)
-    .del()
-    .returning('*')
-    .then((deletedComment) => {
-      if (deletedComment.length === 0) return next({ status: 404 });
-      res.status(200).send({ comment: {} });
-    });
-};
+exports.deleteCommentByArticleAndCommentId = (req, res, next) => knex('comments')
+  .where('comment_id', '=', req.params.comment_id)
+  .del()
+  .returning('*')
+  .then((deletedComment) => {
+    if (deletedComment.length === 0) return next({ status: 404 });
+    res.status(200).send({ comment: {} });
+  });
