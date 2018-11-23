@@ -86,7 +86,6 @@ exports.getCommentsByArticleId = (req, res, next) => {
     .orderBy(sort_by, sortDirectionObj[sort_ascending])
     .offset(offsetAmount)
     .then((comments) => {
-      // console.log(comments);
       res.status(200).send({ comments });
     })
     .catch(next);
@@ -102,3 +101,20 @@ exports.postCommentByArticleId = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.updateCommentByArticleAndCommentId = (req, res, next) => {
+  const incOrDecr = req.body.inc_votes < 0 ? 'decrement' : 'increment';
+  if (typeof req.body.inc_votes === 'string') return next({ status: 400 });
+  const votesInteger = Math.abs(req.body.inc_votes);
+  return knex('comments')
+    [incOrDecr]('votes', votesInteger)
+    .where('comment_id', '=', req.params.comment_id)
+    .returning('*')
+    .then((comment) => {
+      if (comment.length === 0) return next({ status: 404 });
+      res.send({ comment: comment[0] });
+    })
+    .catch(next);
+};
+
+// could make into utils function

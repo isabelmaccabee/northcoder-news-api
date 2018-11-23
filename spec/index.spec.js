@@ -485,14 +485,47 @@ describe('/api', () => {
         });
         it('ERROR: DELETE, PUT and PATCH on /:article_id/comments responds w 405 and err msg', () => {
           const invalidMethods = ['put', 'delete', 'patch'];
-            return Promise.all(
-              invalidMethods.map(method => request[method](`${articlesURL}/1/comments`)
-               .expect(405)
-               .then(({ body }) => {
+          return Promise.all(
+            invalidMethods.map(method => request[method](`${articlesURL}/1/comments`)
+              .expect(405)
+              .then(({ body }) => {
                 expect(body.message).to.equal('Method not valid on this path');
-           })),
+              })),
           );
-        })
+        });
+        describe('/:comment_id', () => {
+          it('PATCH /:comment_id responds with 200 and updated comment', () => {
+            const upByOne = {
+              inc_votes: 1,
+            };
+            const downByOn = {
+              inc_votes: -2,
+            };
+            return Promise.all([request.patch(`${articlesURL}/1/comments/1`).send(upByOne).expect(200).then(({body}) => {
+              expect(body.comment.votes).to.equal(101)
+            }), request.patch(`${articlesURL}/1/comments/1`).send(downByOn).expect(200).then(({body}) => {
+              expect(body.comment.votes).to.equal(99)
+            })]);
+          });
+          it('ERROR: PATCH /:comment_id responds with valid but non-existent comment id 404 and err code', () => {
+            const upByOne = {
+              inc_votes: 1,
+            };
+            return request.patch(`${articlesURL}/1/comments/20`).expect(404).then(({ body }) => {
+              expect(body.message).to.equal('Page not found.')
+            }); 
+          });
+          it('ERROR: GET, POST and PUT on /:comment_id responds w 405 and err msg', () => {
+            const invalidMethods = ['get', 'post', 'put'];
+            return Promise.all(
+              invalidMethods.map(method => request[method](`${articlesURL}/1/comments/1`)
+                .expect(405)
+                .then(({ body }) => {
+                  expect(body.message).to.equal('Method not valid on this path');
+                })),
+            );            
+          });
+        });
       });
     });
   });
