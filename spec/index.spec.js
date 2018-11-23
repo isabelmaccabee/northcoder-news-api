@@ -247,7 +247,7 @@ describe('/api', () => {
     });
   });
   describe('/articles', () => {
-    const articlesURL = '/api/articles'
+    const articlesURL = '/api/articles';
     it('GET / responds with 200 and all articles', () => request
       .get(articlesURL)
       .expect(200)
@@ -268,23 +268,26 @@ describe('/api', () => {
           ]);
         });
       }));
-    it('QUERIES: GET / responds w 200 and correct no. of results if specified in limit query', () => {
-      return request.get(`${articlesURL}?limit=15`).expect(200).then(({ body }) => {
+    it('QUERIES: GET / responds w 200 and correct no. of results if specified in limit query', () => request
+      .get(`${articlesURL}?limit=15`)
+      .expect(200)
+      .then(({ body }) => {
         // console.log(body)
         expect(body.articles.length).to.equal(12);
-      });
-    });
-    it('QUERIES: GET / responds w 200 and correct direction of results if sort_ascending specified', () => {
-      return request.get(`${articlesURL}?sort_ascending=true`).expect(200).then(({ body }) => {
+      }));
+    it('QUERIES: GET / responds w 200 and correct direction of results if sort_ascending specified', () => request
+      .get(`${articlesURL}?sort_ascending=true`)
+      .expect(200)
+      .then(({ body }) => {
         expect(body.articles[0].article_id).to.equal(11);
         expect(body.articles[9].article_id).to.equal(4);
-      });
-    });
-    it('QUERIES: GET / responds w 200 and correct start value if p specified', () => {
-      return request.get(`${articlesURL}?p=2`).expect(200).then(({ body }) => { 
+      }));
+    it('QUERIES: GET / responds w 200 and correct start value if p specified', () => request
+      .get(`${articlesURL}?p=2`)
+      .expect(200)
+      .then(({ body }) => {
         expect(body.articles[0].article_id).to.equal(10);
-      })
-    });
+      }));
     it('QUERIES: GET /:topic/articles responds with 200 and correct sort criteria if sort_by specified (and default is desc)', () => {
       request
         .get(`${articlesURL}?sort_by=title`)
@@ -302,11 +305,13 @@ describe('/api', () => {
           .then(({ body }) => {
             expect(body.message).to.equal('Method not valid on this path');
           })),
-      );    
+      );
     });
     describe('/:article_id', () => {
-      it('GET /:article_id responds w 200 and specified article as obj', () => {
-        return request.get(`${articlesURL}/1`).expect(200).then(({ body }) => {
+      it('GET /:article_id responds w 200 and specified article as obj', () => request
+        .get(`${articlesURL}/1`)
+        .expect(200)
+        .then(({ body }) => {
           expect(body.article).to.be.an('object');
           expect(body.article).to.have.keys([
             'author',
@@ -316,47 +321,91 @@ describe('/api', () => {
             'comment_count',
             'created_at',
             'topic',
-          ])      
-        });
-      });
+          ]);
+        }));
       it('PATCH /:article_id responds w 200 and updated info (positive int)', () => {
         const increaseVotes = {
-          inc_votes: 2
+          inc_votes: 2,
         };
-        return request.patch(`${articlesURL}/10`).send(increaseVotes).expect(200).then(({ body }) => {
-          expect(body.article.votes).to.equal(2);
-        })
-      });      
+        return request
+          .patch(`${articlesURL}/10`)
+          .send(increaseVotes)
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.article.votes).to.equal(2);
+          });
+      });
       it('PATCH /:article_id responds w 200 and updated info (negative int)', () => {
         const increaseVotes = {
-          inc_votes: -10
+          inc_votes: -10,
         };
-        return request.patch(`${articlesURL}/10`).send(increaseVotes).expect(200).then(({ body }) => {
-          expect(body.article).to.have.keys(['title', 'votes', 'user_id', 'created_at', 'article_id', 'body', 'topic'])
-          expect(body.article.votes).to.equal(-10);
-        })
+        return request
+          .patch(`${articlesURL}/10`)
+          .send(increaseVotes)
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.article).to.have.keys([
+              'title',
+              'votes',
+              'user_id',
+              'created_at',
+              'article_id',
+              'body',
+              'topic',
+            ]);
+            expect(body.article.votes).to.equal(-10);
+          });
       });
       it('ERROR: PATCH /:article_id with valid but non-existent id responds with 404 and err msg', () => {
         const increaseVotes = {
-          inc_votes: 2
+          inc_votes: 2,
         };
-        return request.patch(`${articlesURL}/20`).send(increaseVotes).expect(404).then(({ body }) => {
-          expect(body.message).to.equal('Page not found.');
-        })
-      })
+        return request
+          .patch(`${articlesURL}/20`)
+          .send(increaseVotes)
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.message).to.equal('Page not found.');
+          });
+      });
+      it('ERROR: PATCH /:username with invalid id type responds w 400 and err msg', () => {
+        const increaseVotes = {
+          inc_votes: 'increase by one please',
+        };
+        return request.patch(`${articlesURL}/helloworld`).send(increaseVotes).expect(400).then(({body}) => {
+          expect(body.message).to.equal('Invalid data type.');
+        });
+      });
+      it('ERROR: PATCH /:article_id with malformed body responds w 400 and err msg', () => {
+        const increaseVotes = {
+          inc_votes: 'increase by one please',
+        };
+        return request
+          .patch(`${articlesURL}/10`)
+          .send(increaseVotes)
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.message).to.equal('Invalid data type.');
+          });
+      });
       it('ERROR: GET, PATCH or DELETE /:article_id with invalid id type in params gives 400 and err msg', () => {
         const validMethods = ['get', 'patch', 'delete'];
-        return Promise.all(validMethods.map((method) => {
-          request[method](`${articlesURL}/helloworld`).expect(400).then(({body}) => {
-            expect(body.message).to.equal('Invalid data type.')
-          })
-        }));
+        return Promise.all(
+          validMethods.map((method) => {
+            request[method](`${articlesURL}/helloworld`)
+              .expect(400)
+              .then(({ body }) => {
+                expect(body.message).to.equal('Invalid data type.');
+              });
+          }),
+        );
       });
-      it('ERROR: GET /:article_id with valid but non-existent id in params gives 404 and err msg', () => {
-        return request.get(`${articlesURL}/20`).expect(404).then(({ body }) => {
+      it('ERROR: GET /:article_id with valid but non-existent id in params gives 404 and err msg', () => request
+        .get(`${articlesURL}/20`)
+        .expect(404)
+        .then(({ body }) => {
           expect(body.message).to.equal('Page not found.');
-        })
-      });
+        }));
       it('ERROR: PUT and POST on /:article_id responds w 405 and err message', () => {
         const invalidMethods = ['put', 'post'];
         return Promise.all(
@@ -364,8 +413,83 @@ describe('/api', () => {
             .expect(405)
             .then(({ body }) => {
               expect(body.message).to.equal('Method not valid on this path');
-            }))); 
-      })
-    })
+            })),
+        );
+      });
+      // Could return to check comments deleted too
+      it('DELETE /:article_id responds with 200 and empty object', () => {
+        return request.delete(`${articlesURL}/1`).expect(200).then(({body}) => {
+          expect(body.user).to.be.an('object');
+          expect(Object.keys(body.user).length).to.equal(0);
+        }).then(() => {
+          return request.get(`${articlesURL}/1`).expect(404).then(({body}) => {
+            expect(body.message).to.equal('Page not found.')
+          })
+        });
+      });
+      it('ERROR: DELETE /:article_id on valid but non-existent responds with 404 and err msg', () => {
+        return request.delete(`${articlesURL}/20`).expect(404).then(({body}) => {
+          expect(body.message).to.equal('Page not found.');
+        });
+      });
+      it('ERROR: DELETE /:article_id with invalid id type responds w 400 and err msg', () => {
+        return request.delete(`${articlesURL}/helloworld`).expect(400).then(({body}) => {
+          expect(body.message).to.equal('Invalid data type.')
+        });
+      });
+    });
+  });
+  describe('/users', () => {
+    const usersURL = '/api/users';
+    it('GET / responds with 200 and all users', () => request
+      .get(usersURL)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.users).to.be.an('array');
+        expect(body.users.length).to.equal(3);
+        body.users.forEach((user) => {
+          expect(user).to.have.keys(['user_id', 'username', 'avatar_url', 'name']);
+        });
+      }));
+    it('ERROR: DELETE, PUT, PATCH and POST on / responds with 405 and err msg', () => {
+      const invalidMethods = ['put', 'post', 'delete', 'patch'];
+      return Promise.all(
+        invalidMethods.map(method => request[method](usersURL)
+          .expect(405)
+          .then(({ body }) => {
+            expect(body.message).to.equal('Method not valid on this path');
+          })),
+      );
+    });
+    describe('/:username', () => {
+      it('GET /:username responds w 200 and specified user', () => request
+        .get(`${usersURL}/rogersop`)
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.user).to.have.keys(['user_id', 'username', 'avatar_url', 'name']);
+          expect(body.user.user_id).to.equal(3);
+        }));
+      it('ERROR: GET /:username with valid but non-existent username responds w 404 and err msg', () => request
+        .get(`${usersURL}/helloworld`)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.message).to.equal('Page not found.');
+        }));
+      it('ERROR: GET /:username with invalid param type responds w 400 and err msg', () => {
+        return request.get(`${usersURL}/123`).expect(400).then(({body}) => {
+          expect(body.message).to.equal('Invalid data type.')
+        })
+      });
+      it('ERROR: DELETE, PUT, PATCH and POST on /:username responds with 405 and err msg', () => {
+        const invalidMethods = ['put', 'post', 'delete', 'patch'];
+        return Promise.all(
+          invalidMethods.map(method => request[method](`${usersURL}/rogersop`)
+            .expect(405)
+            .then(({ body }) => {
+              expect(body.message).to.equal('Method not valid on this path');
+            })),
+        );
+      });
+    });
   });
 });

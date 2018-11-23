@@ -3,6 +3,7 @@ const {
   getAllArticles,
   getOneArticleById,
   updateArticleById,
+  deleteArticleById,
 } = require('../controllers/articles-ctrl');
 const { handle405s } = require('../errors');
 
@@ -20,6 +21,7 @@ articlesRouter
   .route('/:article_id')
   .get(getOneArticleById)
   .patch(updateArticleById)
+  .delete(deleteArticleById)
   .all(handle405s);
 
 module.exports = articlesRouter;

@@ -1,6 +1,9 @@
 exports.up = function (knex, Promise) {
   return knex.schema.createTable('comments', (commentsTable) => {
-    commentsTable.increments('comment_id').primary();
+    commentsTable
+      .increments('comment_id')
+      .primary()
+      .unsigned();
     commentsTable
       .integer('user_id')
       .references('user_id')
@@ -10,7 +13,8 @@ exports.up = function (knex, Promise) {
       .integer('article_id')
       .references('article_id')
       .inTable('articles')
-      .notNullable();
+      .notNullable()
+      .onDelete('CASCADE');
     commentsTable
       .integer('votes')
       .defaultTo(0)

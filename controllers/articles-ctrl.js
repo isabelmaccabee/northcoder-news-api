@@ -48,6 +48,8 @@ exports.getOneArticleById = (req, res, next) => {
 
 exports.updateArticleById = (req, res, next) => {
   const incOrDecr = req.body.inc_votes < 0 ? 'decrement' : 'increment';
+  // console.log(req.body.inc_votes);
+  if (typeof req.body.inc_votes === 'string') return next({ status: 400 });
   const votesInteger = Math.abs(req.body.inc_votes);
   return knex('articles')
     [incOrDecr]('votes', votesInteger)
@@ -56,5 +58,16 @@ exports.updateArticleById = (req, res, next) => {
     .then((article) => {
       if (article.length === 0) return next({ status: 404 });
       res.send({ article: article[0] });
-    });
+    })
+    .catch(next);
 };
+
+exports.deleteArticleById = (req, res, next) => knex('articles')
+  .where('article_id', '=', req.params.article_id)
+  .del()
+  .returning('*')
+  .then((deletedUser) => {
+    // console.log(deletedUser);
+    if (deletedUser.length === 0) return next({ status: 404 });
+    res.status(200).send({ user: {} });
+  });
