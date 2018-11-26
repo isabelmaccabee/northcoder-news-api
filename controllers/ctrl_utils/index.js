@@ -1,4 +1,3 @@
-exports.checkParams = (params) => {};
 const knex = require('../../db/connection');
 
 exports.validateQueries = (rawQuery, ...validQueries) => {
