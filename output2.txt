@@ -1,0 +1,18 @@
+You are now connected to database "nc_knews_test" as user "isabelmaccabee".
+ comment_id | user_id | article_id | votes | created_at |                                                                                         body                                                                                          
+------------+---------+------------+-------+------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          1 |       2 |          1 |   100 | 2017-07-26 | Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — on you it works.
+          2 |       2 |          1 |  -100 | 2017-06-03 |  I carry a log — yes. Is it funny to you? It is not to me.
+          3 |       2 |          1 |     0 | 2017-06-03 | I hate streaming noses
+          4 |       2 |          1 |     0 | 2017-06-03 | I hate streaming eyes even more
+          5 |       2 |          1 |     0 | 2017-06-03 | Lobster pot
+          6 |       2 |          1 |     0 | 2017-06-03 | Delicious crackerbreads
+          7 |       2 |          1 |     0 | 2017-06-03 | Superficially charming
+          8 |       2 |          1 |     0 | 2017-06-03 | git push origin master
+          9 |       2 |          1 |     0 | 2017-06-03 | Ambidextrous marsupial
+         10 |       2 |          1 |     0 | 2017-06-03 | Massive intercranial brain haemorrhage
+         11 |       2 |          1 |     0 | 2017-06-03 | Fruit pastilles
+         14 |       1 |          1 |    14 | 2017-08-05 | The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.
+         15 |       1 |          1 |    16 | 2016-02-08 | This morning, I showered for nine minutes.
+(13 rows)
+
