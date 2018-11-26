@@ -21,13 +21,13 @@ exports.getArticlesByTopic = (req, res, next) => {
   } = req.query;
   const offsetAmount = limit * (p - 1);
   const sortDirectionObj = { false: 'desc', true: 'asc' };
-  const validatedQueries = validateQueries(
-    rawQueries,
+  const validatedSortBy = validateQueries(
+    sort_by,
     'title',
     'votes',
     'author',
     'created_at',
-    // add to
+    'author',
   );
   return knex('articles')
     .select(
@@ -41,7 +41,7 @@ exports.getArticlesByTopic = (req, res, next) => {
     .join('users', 'users.user_id', '=', 'articles.user_id')
     .leftJoin('comments', 'comments.article_id', '=', 'articles.article_id')
     .groupBy('articles.article_id', 'users.username')
-    .orderBy(sort_by, sortDirectionObj[sort_ascending])
+    .orderBy(validatedSortBy, sortDirectionObj[sort_ascending])
     .count('comments.comment_id as comment_count')
     .limit(limit)
     .offset(offsetAmount)

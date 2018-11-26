@@ -1,14 +1,16 @@
 exports.checkParams = (params) => {};
 const knex = require('../../db/connection');
 
-exports.validateQueries = (rawQueries, ...validQueries) => {
-  const rawQueryArray = Object.keys(rawQueries);
-  return validQueries.reduce((acc, validQuery) => {
-    if (rawQueryArray.includes(validQuery)) {
-      acc[validQuery] = rawQueries[validQuery];
-    }
-    return acc;
-  }, {});
+exports.validateQueries = (rawQuery, ...validQueries) => {
+  // const rawQueryArray = Object.keys(rawQueries);
+  // return validQueries.reduce((acc, validQuery) => {
+  //   if (rawQueryArray.includes(validQuery)) {
+  //     acc[validQuery] = rawQueries[validQuery];
+  //   }
+  //   return acc;
+  // }, {});
+  if (validQueries.includes(rawQuery)) return rawQuery;
+  return 'created_at';
 };
 
 exports.getArticlesWithCommentCounter = (userQueries) => {
@@ -38,3 +40,7 @@ exports.getArticlesWithCommentCounter = (userQueries) => {
     .limit(limit)
     .offset(offsetAmount);
 };
+
+exports.checkArticleExists = id => knex('articles')
+  .select('article_id')
+  .where('article_id', '=', id);

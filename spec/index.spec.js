@@ -6,6 +6,8 @@ const connection = require('../db/connection');
 
 const request = supertest(app);
 
+//An updated to the articles/:article_id/comments section means it now passes the tests but throws up an error, I'm unsure why unfortuantely
+
 describe('/api', () => {
   beforeEach(() => connection.migrate
     .rollback()
@@ -179,6 +181,15 @@ describe('/api', () => {
             expect(body.articles[9].article_id).to.equal(11); // Article with title = 'A' spills
           });
       });
+      it('QUERIES: GET /:topic/articles responds with 200 and default if sort_by query params non-existent', () => {
+        return request
+          .get(`${topicsURL}/mitch/articles?sort_by=movies`)
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles[0].article_id).to.equal(1);
+            expect(body.articles[9].article_id).to.equal(11);
+          });
+      })
       it('ERROR: GET /:topic/articles with valid but non-existent param responds w 404 and error msg', () => {
         request
           .get(`${topicsURL}/horses/articles`)
@@ -300,6 +311,15 @@ describe('/api', () => {
           expect(body.articles[9].article_id).to.equal(8); // Articles starting w 'A' and 'Am' spill to next page
         });
     });
+    it('QUERIES: GET /:topic/articles responds with 200 and default if sort_by query params non-existent', () => {
+      return request
+        .get(`${articlesURL}?sort_by=movies`)
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles[3].topic).to.equal('mitch');
+          expect(body.articles[4].topic).to.equal('cats');
+        });
+    })
     it('ERROR: DELETE, PATCH and PUT on / responds w 405 and "Method not valid" message', () => {
       const invalidMethods = ['delete', 'patch', 'put'];
       return Promise.all(
@@ -420,10 +440,9 @@ describe('/api', () => {
         );
       });
       // Could return to check comments deleted too
-      it('DELETE /:article_id responds with 200 and empty object', () => {
-        return request.delete(`${articlesURL}/1`).expect(200).then(({ body }) => {
-          expect(body.user).to.be.an('object');
-          expect(Object.keys(body.user).length).to.equal(0);
+      it('DELETE /:article_id responds with 204 and empty object', () => {
+        return request.delete(`${articlesURL}/1`).expect(204).then(({ body }) => {
+          expect(Object.keys(body).length).to.equal(0);
         }).then(() => {
           return request.get(`${articlesURL}/1`).expect(404).then(({ body }) => {
             expect(body.message).to.equal('Page not found.')
@@ -495,7 +514,7 @@ describe('/api', () => {
               })),
           );
         });
-        describe('/:comment_id', () => {
+        describe.only('/:comment_id', () => {
           it('PATCH /:comment_id responds with 200 and updated comment', () => {
             const upByOne = {
               inc_votes: 1,
@@ -524,6 +543,14 @@ describe('/api', () => {
             return request.patch(`${articlesURL}/1/comments/helloworld`).expect(400).then(({ body }) => {
               expect(body.message).to.equal('Invalid data type.')
             }); 
+          });
+          it('ERROR: PATCH /:comment_id where /:article_id is valid but non-existent (comment_id is valid though) responds w 404 and err msg', () => {
+            const upByOne = {
+              inc_votes: 1,
+            };
+            return request.patch(`${articlesURL}/20/comments/1`).expect(404).then(({ body }) => {
+              expect(body.message).to.equal('Page not found.')
+            }); 
           })
           it('ERROR: PATCH /:comment_id with malformed body responds w 400 and err msg', () => {
             const increaseVotes = {
@@ -537,10 +564,14 @@ describe('/api', () => {
                 expect(body.message).to.equal('Invalid data type.');
               });
           });
-          it('DELETE /:comment_id responds with 200 and empty obj', () => {
-            return request.delete(`${articlesURL}/1/comments/1`).expect(200).then(({ body }) => {
-              expect(body.comment).to.be.an('object');
-              expect(Object.keys(body.comment).length).to.equal(0);
+          it('PATCH /:comment_id with no body returns 200 and unmodified comment', () => {
+            return request.patch(`${articlesURL}/1/comments/1`).expect(200).then(({body}) => {
+              expect(body.comment.votes).to.equal(100);
+            });
+          })
+          it('DELETE /:comment_id responds with 204 and empty obj', () => {
+            return request.delete(`${articlesURL}/1/comments/1`).expect(204).then(({ body }) => {
+              expect(Object.keys(body).length).to.equal(0);
             }).then(() => {
               return request.get(`${articlesURL}/1/comments`).expect(200).then(({ body }) => {
                 body.comments.forEach((comment) => {
@@ -554,6 +585,11 @@ describe('/api', () => {
               expect(body.message).to.equal('Page not found.')
             })
           });
+          it('ERROR: DELETE /:comment_id with valid but no-existent article_id (but existent comment_id) responds with 404 and err msg', () => {
+            return request.delete(`${articlesURL}/20/comments/1`).expect(404).then(({body}) => {
+              expect(body.message).to.equal("Page not found.")
+            })
+          })
           it('ERROR: DELETE /:comment_id with invalid id type responds w 400 and err msg', () => {
             return request.delete(`${articlesURL}/1/comments/helloworld`).expect(400).then(({ body }) => {
               expect(body.message).to.equal('Invalid data type.');
