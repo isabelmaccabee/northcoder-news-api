@@ -30,6 +30,7 @@ exports.getArticlesWithCommentCounter = (userQueries) => {
       'articles.created_at',
       'articles.article_id',
       'articles.topic',
+      'articles.body',
     )
     .join('users', 'users.user_id', '=', 'articles.user_id')
     .leftJoin('comments', 'comments.article_id', '=', 'articles.article_id')

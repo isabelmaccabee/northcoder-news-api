@@ -2,8 +2,8 @@ const usersRouter = require('express').Router();
 const { getAllUsers, getUserById } = require('../controllers/users-ctrl');
 const { handle405s } = require('../errors/');
 
-usersRouter.param('username', (req, res, next) => {
-  if (/\d/g.test(req.params.username)) return next({ status: 400 });
+usersRouter.param('user_id', (req, res, next) => {
+  if (/[a-z]/gi.test(req.params.user_id)) return next({ status: 400 });
   next();
 });
 
@@ -13,7 +13,7 @@ usersRouter
   .all(handle405s);
 
 usersRouter
-  .route('/:username')
+  .route('/:user_id')
   .get(getUserById)
   .all(handle405s);
 

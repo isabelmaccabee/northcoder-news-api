@@ -1,4 +1,5 @@
 exports.handle400s = (err, req, res, next) => {
+  console.log(err, 'err,');
   const errorCodes = {
     23502: 'Malformed request, missing row info',
     400: 'Invalid data type.',
