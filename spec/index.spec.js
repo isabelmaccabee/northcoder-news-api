@@ -208,6 +208,11 @@ describe('/api', () => {
             })),
         );
       });
+      it('ERROR: GET /:topic/articles with wrong data type for limit or p value returns 400', () => {
+        request.get(`${topicsURL}/horses/articles?limit=hello`).expect(400).then(({ body }) => {
+          expect(body.message).to.equal('???');
+        });
+      });
       it('POST /:topic/articles responds with 201 and posted article with id', () => {
         const newArticle = {
           title: 'What is the meaning of life?',
@@ -514,7 +519,7 @@ describe('/api', () => {
               })),
           );
         });
-        describe.only('/:comment_id', () => {
+        describe('/:comment_id', () => {
           it('PATCH /:comment_id responds with 200 and updated comment', () => {
             const upByOne = {
               inc_votes: 1,

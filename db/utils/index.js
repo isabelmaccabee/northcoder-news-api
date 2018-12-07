@@ -1,6 +1,6 @@
 const formatArticleData = (rawArticleData, referenceObj) => rawArticleData.map((rawDatum) => {
   const {
-    title, topic, created_by, body, created_at,
+    title, topic, created_by, body, created_at, votes,
   } = rawDatum;
   const newObj = {
     title,
@@ -8,6 +8,7 @@ const formatArticleData = (rawArticleData, referenceObj) => rawArticleData.map((
     body,
     created_at: new Date(created_at),
     user_id: referenceObj[created_by],
+    votes,
   };
   return newObj;
 });

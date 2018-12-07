@@ -47,6 +47,7 @@ exports.getArticlesByTopic = (req, res, next) => {
     .offset(offsetAmount)
     .where('topic', '=', topic)
     .then((articles) => {
+      if (/[^\d]/g.test(limit) || /[^\d]/g.test(p)) return next({ status: 400 });
       if (articles.length === 0) {
         return next({ status: 404, message: 'Page not found' });
       }
