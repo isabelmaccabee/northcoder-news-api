@@ -43,7 +43,7 @@ exports.updateCommentById = (req, res, next) => checkArticleExists(req.params.ar
   })
   .then(() => {
     const incOrDecr = req.body.inc_votes < 0 ? 'decrement' : 'increment';
-    if (typeof req.body.inc_votes === 'string') return next({ status: 400 });
+    if (typeof req.body.inc_votes === 'string') return Promise.reject({ status: 400 });
     const votesInteger = req.body.inc_votes === undefined ? 0 : Math.abs(req.body.inc_votes);
     return knex('comments')
       [incOrDecr]('votes', votesInteger)

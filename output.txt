@@ -1,17 +1,125 @@
-You are now connected to database "nc_knews_test" as user "isabelmaccabee".
- article_id |                         title                          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                body                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | votes | topic | user_id | created_at 
-------------+--------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------+-------+---------+------------
-          1 | Living in the shadow of a great man                    | I find this existence challenging                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |     0 | mitch |       1 | 2018-11-15
-          2 | Sony Vaio; or, The Laptop                              | Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me. |     0 | mitch |       2 | 2014-11-16
-          3 | Eight pug gifs that remind me of mitch                 | some gifs                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |     0 | mitch |       2 | 2010-11-17
-          4 | Student SUES Mitch!                                    | We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |     0 | mitch |       3 | 2006-11-18
-          5 | UNCOVERED: catspiracy to bring down democracy          | Bastet walks amongst us, and the cats are taking arms!                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |     0 | cats  |       3 | 2002-11-19
-          6 | A                                                      | Delicious tin of cat food                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |     0 | mitch |       2 | 1998-11-20
-          7 | Z                                                      | I was hungry.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |     0 | mitch |       2 | 1994-11-21
-          8 | Does Mitch predate civilisation?                       | Archaeologists have uncovered a gigantic statue from the dawn of humanity, and it has an uncanny resemblance to Mitch. Surely I am not the only person who can see this?!                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |     0 | mitch |       2 | 1990-11-22
-          9 | They're not exactly dogs, are they?                    | Well? Think about it.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |     0 | mitch |       1 | 1986-11-23
-         10 | Seven inspirational thought leaders from Manchester UK | Who are we kidding, there is only one, and it's Mitch!                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |     0 | mitch |       3 | 1982-11-24
-         11 | Am I a cat?                                            | Having run out of ideas for articles, I am staring at the wall blankly, like a cat. Does this make me a cat?                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |     0 | mitch |       2 | 1978-11-25
-         12 | Moustache                                              | Have you seen the size of that thing?                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |     0 | mitch |       1 | 1974-11-26
-(12 rows)
+
+> BE2-NC-Knews@1.0.0 test /Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews
+> mocha spec/index.spec.js
+
+
+
+  /api
+    ✓ GET / responds with 200 and welcome message
+    ✓ GET /* responds with 404 and "Page not found" error message
+    ✓ ERROR: DELETE, PATCH and PUT / responds with 405 and "Method not valid" error message
+    /topics
+      ✓ GET / responds with 200 and all topics
+      ✓ POST / responds with 201 and added article with ID (55ms)
+      ✓ ERROR: Malformed post request (null for column values) responds with 400 and error message
+      ✓ ERROR: Non-unique slug responds with 422 and correct error message
+      ✓ ERROR: DELETE, PATCH and PUT on / responds with 405 and "Method not valid" message 
+      /:topics/articles
+        ✓ GET /:topic/articles responds w 200 and all articles for specified topic, with default queries (limit = 10,sorted-by=date, order=desc,p=1)
+        ✓ GET /:topic/articles with valid but non-existent query params are ignored and give 200
+        ✓ QUERIES: GET /:topic/articles responds with 200 and correct no. of results if limit query specified
+        ✓ QUERIES: GET /:topic/articles responds with 200 and correct sort order if direction specified
+        ✓ QUERIES: GET /:topic/articles responds w 200 and correct items when page is specified
+        ✓ QUERIES: GET /:topic/articles responds with 200 and correct sort criteria if sort_by specified (and default is desc)
+        ✓ QUERIES: GET /:topic/articles responds with 200 and default if sort_by query params non-existent
+        ✓ ERROR: GET /:topic/articles with valid but non-existent param responds w 404 and error msg
+        ✓ ERROR: DELETE or PATCH on /:topic/articles return 405 and appropriate error message
+        ✓ ERROR: GET /:topic/articles with wrong data type for limit or p value returns 400
+A valid integer must be provided to limit
+        ✓ POST /:topic/articles responds with 201 and posted article with id
+        ✓ ERROR: POST /:topic/articles with malformed body reponds with 400 and err msg
+        ✓ ERROR: POST /:topic/articles with valid but non-existent slug responds w 404 and err msg
+    /articles
+      ✓ GET / responds with 200 and all articles with default query params
+      ✓ QUERIES: GET / responds w 200 and correct no. of results if specified in limit query
+      ✓ QUERIES: GET / responds w 200 and correct direction of results if sort_ascending specified
+      ✓ QUERIES: GET / responds w 200 and correct start value if p specified
+      ✓ QUERIES: GET /articles responds with 200 and correct sort criteria if sort_by specified (and default is desc)
+      ✓ QUERIES: GET /:topic/articles responds with 200 and default if sort_by query params non-existent
+      ✓ ERROR: DELETE, PATCH and PUT on / responds w 405 and "Method not valid" message
+      /:article_id
+        ✓ GET /:article_id responds w 200 and specified article as obj
+        ✓ PATCH /:article_id responds w 200 and updated info (positive int)
+        ✓ PATCH /:article_id responds w 200 and updated info (negative int)
+        ✓ ERROR: PATCH /:article_id with valid but non-existent id responds with 404 and err msg
+        ✓ ERROR: PATCH /:username with invalid id type responds w 400 and err msg
+        ✓ ERROR: PATCH /:article_id with malformed body responds w 400 and err msg
+        ✓ ERROR: GET, PATCH or DELETE /:article_id with invalid id type in params gives 400 and err msg
+        ✓ ERROR: GET /:article_id with valid but non-existent id in params gives 404 and err msg
+        ✓ ERROR: PUT and POST on /:article_id responds w 405 and err message
+        ✓ DELETE /:article_id responds with 204 and empty object
+        ✓ ERROR: DELETE /:article_id on valid but non-existent responds with 404 and err msg
+        ✓ ERROR: DELETE /:article_id with invalid id type responds w 400 and err msg
+        /comments
+          ✓ GET /:article_id/comments responds w 200 and comments for specified id, with defaults specified
+          ✓ QUERIES: GET /:article_id/comments responds w 200 and comments when sort_ascending specified to true
+          ✓ QUERIES: GET /:article_id/comments responds w 200 and correct no, of comments when limit specified
+          ✓ QUERIES: GET /:article_id/comments responds with 200 and ordered by specific column when sort_by specified 
+          ✓ QUERIES: GET /:article_id/comments responds with 200 and p is specified
+          ✓ POST /:article_id/comments responds with 201 and responds with added comment
+          ✓ ERROR: DELETE, PUT and PATCH on /:article_id/comments responds w 405 and err msg
+          /:comment_id
+            ✓ PATCH /:comment_id responds with 200 and updated comment
+            ✓ ERROR: PATCH /:comment_id responds with valid but non-existent comment id 404 and err code
+            ✓ ERROR: PATCH /:comment_id responds with invalid id gives 400 and err msg 
+            ✓ ERROR: PATCH /:comment_id where /:article_id is valid but non-existent (comment_id is valid though) responds w 404 and err msg
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:470:11)
+    at ServerResponse.header (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/express/lib/response.js:767:10)
+    at ServerResponse.send (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/express/lib/response.js:170:12)
+    at ServerResponse.json (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/express/lib/response.js:267:15)
+    at ServerResponse.send (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/express/lib/response.js:158:21)
+    at checkArticleExists.then.then.then (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/controllers/comments-ctrl.js:55:9)
+    at tryCatcher (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/util.js:16:23)
+    at Promise._settlePromiseFromHandler (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/promise.js:512:31)
+    at Promise._settlePromise (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/promise.js:569:18)
+    at Promise._settlePromise0 (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/promise.js:614:10)
+    at Promise._settlePromises (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/promise.js:694:18)
+    at _drainQueueStep (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/async.js:138:12)
+    at _drainQueue (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/async.js:131:9)
+    at Async._drainQueues (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/async.js:147:5)
+    at Immediate.Async.drainQueues [as _onImmediate] (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/async.js:17:14)
+    at runCallback (timers.js:694:18)
+    at tryOnImmediate (timers.js:665:5)
+    at processImmediate (timers.js:647:5)
+            ✓ ERROR: PATCH /:comment_id with malformed body responds w 400 and err msg
+            ✓ PATCH /:comment_id with no body returns 200 and unmodified comment
+            ✓ DELETE /:comment_id responds with 204 and empty obj
+            ✓ ERROR: DELETE /:comment_id with valid but non-existent id responds with 404 and err msg
+            ✓ ERROR: DELETE /:comment_id with valid but no-existent article_id (but existent comment_id) responds with 404 and err msg
+TypeError: Cannot read property 'length' of undefined
+    at checkArticleExists.then.then (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/controllers/comments-ctrl.js:72:24)
+    at tryCatcher (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/util.js:16:23)
+    at Promise._settlePromiseFromHandler (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/promise.js:512:31)
+    at Promise._settlePromise (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/promise.js:569:18)
+    at Promise._settlePromise0 (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/promise.js:614:10)
+    at Promise._settlePromises (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/promise.js:694:18)
+    at _drainQueueStep (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/async.js:138:12)
+    at _drainQueue (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/async.js:131:9)
+    at Async._drainQueues (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/async.js:147:5)
+    at Immediate.Async.drainQueues [as _onImmediate] (/Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews/node_modules/bluebird/js/release/async.js:17:14)
+    at runCallback (timers.js:694:18)
+    at tryOnImmediate (timers.js:665:5)
+    at processImmediate (timers.js:647:5)
+            ✓ ERROR: DELETE /:comment_id with invalid id type responds w 400 and err msg
+            ✓ ERROR: GET, POST and PUT on /:comment_id responds w 405 and err msg
+    /users
+      ✓ GET / responds with 200 and all users
+      ✓ ERROR: DELETE, PUT, PATCH and POST on / responds with 405 and err msg
+      /:username
+        ✓ GET /:username responds w 200 and specified user
+        ✓ ERROR: GET /:username with valid but non-existent username responds w 404 and err msg
+        ✓ ERROR: GET /:username with invalid param type responds w 400 and err msg
+        ✓ ERROR: DELETE, PUT, PATCH and POST on /:username responds with 405 and err msg
+
+
+  64 passing (22s)
+
+
+> BE2-NC-Knews@1.0.0 posttest /Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews
+> npm run lint
+
+
+> BE2-NC-Knews@1.0.0 lint /Users/isabelmaccabee/Documents/CODING/Northcoders/Back-End-02/BE2-NC-Knews
+> eslint ./
 

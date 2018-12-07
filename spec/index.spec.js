@@ -638,27 +638,27 @@ describe('/api', () => {
     });
     describe('/:username', () => {
       it('GET /:username responds w 200 and specified user', () => request
-        .get(`${usersURL}/rogersop`)
+        .get(`${usersURL}/3`)
         .expect(200)
         .then(({ body }) => {
           expect(body.user).to.have.keys(['user_id', 'username', 'avatar_url', 'name']);
-          expect(body.user.user_id).to.equal(3);
+          expect(body.user.username).to.equal("rogersop");
         }));
       it('ERROR: GET /:username with valid but non-existent username responds w 404 and err msg', () => request
-        .get(`${usersURL}/helloworld`)
+        .get(`${usersURL}/20`)
         .expect(404)
         .then(({ body }) => {
           expect(body.message).to.equal('Page not found.');
         }));
       it('ERROR: GET /:username with invalid param type responds w 400 and err msg', () => {
-        return request.get(`${usersURL}/123`).expect(400).then(({body}) => {
+        return request.get(`${usersURL}/helloworld`).expect(400).then(({body}) => {
           expect(body.message).to.equal('Invalid data type.')
         })
       });
       it('ERROR: DELETE, PUT, PATCH and POST on /:username responds with 405 and err msg', () => {
         const invalidMethods = ['put', 'post', 'delete', 'patch'];
         return Promise.all(
-          invalidMethods.map(method => request[method](`${usersURL}/rogersop`)
+          invalidMethods.map(method => request[method](`${usersURL}/3`)
             .expect(405)
             .then(({ body }) => {
               expect(body.message).to.equal('Method not valid on this path');
