@@ -210,7 +210,7 @@ describe('/api', () => {
       });
       it('ERROR: GET /:topic/articles with wrong data type for limit or p value returns 400', () => {
         request.get(`${topicsURL}/horses/articles?limit=hello`).expect(400).then(({ body }) => {
-          expect(body.message).to.equal('???');
+          expect(body.message).to.equal('Invalid data type.')
         });
       });
       it('POST /:topic/articles responds with 201 and posted article with id', () => {
@@ -499,7 +499,7 @@ describe('/api', () => {
             expect(body.comments.length).to.equal(3);
             expect(body.comments[2].comment_id).to.equal(15)
           })
-        })
+        });
         it('POST /:article_id/comments responds with 201 and responds with added comment', () => {
           const newComment = {
             user_id: 1,
@@ -509,7 +509,24 @@ describe('/api', () => {
             expect(body.comment).to.have.keys(['user_id', 'body', 'article_id', 'comment_id', 'created_at', 'votes'])
           })
         });
-       
+        it('ERROR POST /:article_id/comments responds with 400 if user_id in body is non-existent', () => {
+          const newComment = {
+            user_id: 20,
+            body: 'What a great article, really love it'
+          }
+          return request.post(`${articlesURL}/1/comments`).send(newComment).expect(400).then(({ body }) => {
+            expect(body.message).to.equal('Malformed request, user does not exist');
+          });
+        });
+        it('ERROR POST /:article_id/comments responds with 400 non-existent column is referenced in body', () => {
+          const newComment = {
+            helloworld: 1,
+            body: 'What a great article, really love it'
+          }
+          return request.post(`${articlesURL}/1/comments`).send(newComment).expect(400).then(({ body }) => {
+            expect(body.message).to.equal('Malformed request, column does not exist');
+          });
+        });
         it('ERROR: DELETE, PUT and PATCH on /:article_id/comments responds w 405 and err msg', () => {
           const invalidMethods = ['put', 'delete', 'patch'];
           return Promise.all(

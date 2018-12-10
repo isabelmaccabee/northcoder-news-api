@@ -34,11 +34,16 @@ exports.postCommentByArticleId = (req, res, next) => checkArticleExists(req.para
   .then((comment) => {
     res.status(201).send({ comment: comment[0] });
   })
-  .catch(next);
+  .catch((err) => {
+    if (err.detail) {
+      if (err.detail.includes('is not present in table "users".')) return next({ status: '23503-400' });
+    }
+    next(err);
+  });
 
 exports.updateCommentById = (req, res, next) => checkArticleExists(req.params.article_id)
   .then((id) => {
-    if (id.length === 0) return next({ status: 404 });
+    if (id.length === 0) return Promise.reject({ status: 404 });
     return true;
   })
   .then(() => {
@@ -60,16 +65,14 @@ exports.updateCommentById = (req, res, next) => checkArticleExists(req.params.ar
 
 exports.deleteCommentById = (req, res, next) => checkArticleExists(req.params.article_id)
   .then((id) => {
-    if (id.length === 0) {
-      return next({ status: 404 });
-    }
-    return knex('comments')
-      .where('comment_id', '=', req.params.comment_id)
-      .del()
-      .returning('*');
+    if (id.length === 0) return Promise.reject({ status: 404 });
+    return true;
   })
+  .then(() => knex('comments')
+    .where('comment_id', '=', req.params.comment_id)
+    .del())
   .then((deletedComment) => {
-    if (deletedComment.length === 0) return next({ status: 404 });
+    if (deletedComment === 0) return next({ status: 404 });
     res.status(204).send({ comment: {} });
   })
   .catch(next);

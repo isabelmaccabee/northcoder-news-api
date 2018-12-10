@@ -1,7 +1,9 @@
 exports.handle400s = (err, req, res, next) => {
   const errorCodes = {
+    42703: 'Malformed request, column does not exist',
     23502: 'Malformed request, missing row info',
     400: 'Invalid data type.',
+    '23503-400': 'Malformed request, user does not exist',
   };
   if (errorCodes[err.code] || errorCodes[err.status]) {
     if (err.status) err.code = err.status;
