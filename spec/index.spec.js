@@ -509,6 +509,7 @@ describe('/api', () => {
             expect(body.comment).to.have.keys(['user_id', 'body', 'article_id', 'comment_id', 'created_at', 'votes'])
           })
         });
+       
         it('ERROR: DELETE, PUT and PATCH on /:article_id/comments responds w 405 and err msg', () => {
           const invalidMethods = ['put', 'delete', 'patch'];
           return Promise.all(
