@@ -250,6 +250,20 @@ describe('/api', () => {
             expect(body.message).to.equal('Malformed request, missing row info');
           });
       });
+      it('ERROR: POST /:topic/articles with valid but non-existent user_id in body returns 400', () => {
+        const newArticle = {
+          title: 'What is the meaning of life?',
+          user_id: 20,
+          body: 'Some say the meaning of life is 42, some say it is love. I say it is cats.',
+        };
+        return request
+          .post(`${topicsURL}/cats/articles`)
+          .send(newArticle)
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.message).to.equal('Malformed request, user does not exist');
+          });
+      });
       it('ERROR: POST /:topic/articles with valid but non-existent slug responds w 404 and err msg', () => {
         const newArticle = {
           title: 'What is the meaning of life?',

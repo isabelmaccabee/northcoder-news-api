@@ -72,5 +72,10 @@ exports.postOneArticle = (req, res, next) => {
     .then((article) => {
       res.status(201).send({ article: article[0] });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.detail) {
+        if (err.detail.includes('is not present in table "users".')) return next({ status: '23503-400' });
+      }
+      next(err);
+    });
 };
