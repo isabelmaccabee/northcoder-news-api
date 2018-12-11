@@ -603,7 +603,7 @@ describe('/api', () => {
               });
           });
           it('PATCH /:comment_id with no body returns 200 and unmodified comment', () => {
-            return request.patch(`${articlesURL}/1/comments/1`).expect(200).then(({body}) => {
+            return request.patch(`${articlesURL}/1/comments/1`).expect(200).then(({ body }) => {
               expect(body.comment.votes).to.equal(100);
             });
           })
@@ -671,27 +671,27 @@ describe('/api', () => {
     });
     describe('/:username', () => {
       it('GET /:username responds w 200 and specified user', () => request
-        .get(`${usersURL}/3`)
+        .get(`${usersURL}/rogersop`)
         .expect(200)
         .then(({ body }) => {
           expect(body.user).to.have.keys(['user_id', 'username', 'avatar_url', 'name']);
-          expect(body.user.username).to.equal("rogersop");
+          expect(body.user.user_id).to.equal(3);
         }));
       it('ERROR: GET /:username with valid but non-existent username responds w 404 and err msg', () => request
-        .get(`${usersURL}/20`)
+        .get(`${usersURL}/helloworld`)
         .expect(404)
         .then(({ body }) => {
           expect(body.message).to.equal('Page not found.');
         }));
       it('ERROR: GET /:username with invalid param type responds w 400 and err msg', () => {
-        return request.get(`${usersURL}/helloworld`).expect(400).then(({body}) => {
+        return request.get(`${usersURL}/3`).expect(400).then(({ body }) => {
           expect(body.message).to.equal('Invalid data type.')
         })
       });
       it('ERROR: DELETE, PUT, PATCH and POST on /:username responds with 405 and err msg', () => {
         const invalidMethods = ['put', 'post', 'delete', 'patch'];
         return Promise.all(
-          invalidMethods.map(method => request[method](`${usersURL}/3`)
+          invalidMethods.map(method => request[method](`${usersURL}/rogersop`)
             .expect(405)
             .then(({ body }) => {
               expect(body.message).to.equal('Method not valid on this path');
