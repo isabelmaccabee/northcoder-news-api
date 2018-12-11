@@ -5,6 +5,7 @@ module.exports = [
     created_by: 'jessjelly',
     body: 'This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.',
     created_at: 1471522072389,
+    votes: 10
   },
   {
     title: "The Rise Of Thinking Machines: How IBM's Watson Takes On The World",
@@ -33,6 +34,7 @@ module.exports = [
     created_by: 'jessjelly',
     body: 'Another Angular version planned already? Whaaaat? Didn’t Angular 2 just ship? Why Angular 3? What? Why? First off, there is no massive rewrite, and won’t be for Angular 3. Secondly, let me explain the future of Angular 2 and what Angular 3, Angular 4 will mean for you.',
     created_at: 1477282382648,
+    votes: 14,
   },
   {
     title: 'JavaScript’s Apply, Call, and Bind Methods are Essential for JavaScript Professionals',
