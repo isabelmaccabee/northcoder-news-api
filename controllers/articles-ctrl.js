@@ -44,15 +44,26 @@ exports.getAllArticles = (req, res, next) => {
     .catch(next);
 };
 
-exports.getOneArticleById = (req, res, next) => {
-  getArticlesWithCommentCounter(req.query)
-    .where('articles.article_id', '=', req.params.article_id)
-    .then((article) => {
-      if (article.length === 0) return next({ status: 404, message: 'Page not found' });
-      res.status(200).send({ article: article[0] });
-    })
-    .catch(next);
-};
+exports.getOneArticleById = (req, res, next) => knex('articles')
+  .select(
+    'articles.title',
+    'articles.votes',
+    'users.username as author',
+    'articles.created_at',
+    'articles.article_id',
+    'articles.topic',
+    'articles.body',
+  )
+  .join('users', 'users.user_id', '=', 'articles.user_id')
+  .leftJoin('comments', 'comments.article_id', '=', 'articles.article_id')
+  .groupBy('articles.article_id', 'users.username')
+  .count('comments.comment_id as comment_count')
+  .where('articles.article_id', '=', req.params.article_id)
+  .then((article) => {
+    if (article.length === 0) return next({ status: 404, message: 'Page not found' });
+    res.status(200).send({ article: article[0] });
+  })
+  .catch(next);
 
 exports.updateArticleById = (req, res, next) => {
   const incOrDecr = req.body.inc_votes < 0 ? 'decrement' : 'increment';

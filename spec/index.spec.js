@@ -362,6 +362,7 @@ describe('/api', () => {
             'votes',
             'comment_count',
             'created_at',
+            'body',
             'topic',
           ]);
         }));
