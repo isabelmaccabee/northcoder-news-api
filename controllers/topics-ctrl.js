@@ -27,7 +27,7 @@ exports.getArticlesByTopic = (req, res, next) => {
     'votes',
     'author',
     'created_at',
-    'author',
+    'article_id',
   );
   return knex('articles')
     .select(

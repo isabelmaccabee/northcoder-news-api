@@ -3,34 +3,34 @@ module.exports = [
     username: 'tickle122',
     name: 'Tom Tickle',
     avatar_url:
-      'https://www.spiritsurfers.net/monastery/wp-content/uploads/_41500270_mrtickle.jpg',
+      'https://images.pexels.com/photos/34533/owl-glitter-stuffed-animal-cute.jpg?auto=compress&cs=tinysrgb&h=750&w=1260',
   },
   {
     username: 'grumpy19',
     name: 'Paul Grump',
-    avatar_url: 'https://www.tumbit.com/profile-image/4/original/mr-grumpy.jpg',
+    avatar_url: 'https://s.hdnux.com/photos/51/30/05/10846589/7/920x920.jpg',
   },
   {
     username: 'happyamy2016',
     name: 'Amy Happy',
-    avatar_url:
-      'https://vignette1.wikia.nocookie.net/mrmen/images/7/7f/Mr_Happy.jpg/revision/latest?cb=20140102171729',
+    avatar_url: 'https://i.ytimg.com/vi/SNggmeilXDQ/maxresdefault.jpg',
   },
   {
     username: 'cooljmessy',
     name: 'Peter Messy',
-    avatar_url: 'https://i.imgur.com/WfX0Neu.jpg',
+    avatar_url:
+      'https://www.telegraph.co.uk/content/dam/Pets/spark/royal-canin/happy-puppy.jpg?imwidth=450',
   },
   {
     username: 'weegembump',
     name: 'Gemma Bump',
     avatar_url:
-      'https://www.upandrunning.co.uk/media/catalog/product/cache/1/image/650x/040ec09b1e35df139433887a97daa66f/m/r/mr-bump.jpg',
+      'https://images.mentalfloss.com/sites/default/files/styles/mf_image_16x9/public/iStock-177369626_0.jpg?itok=1Q7WLYKP&resize=1100x1100',
   },
   {
     username: 'jessjelly',
     name: 'Jess Jelly',
     avatar_url:
-      'https://s-media-cache-ak0.pinimg.com/564x/39/62/ec/3962eca164e60cf46f979c1f57d4078b.jpg',
+      'https://66.media.tumblr.com/709acf5805b63bf412dd5cf8d6e34803/tumblr_oplgjdcYJl1sgqqono1_500.jpg',
   },
 ];
