@@ -3,7 +3,7 @@ const { getAllUsers, getUserById } = require('../controllers/users-ctrl');
 const { handle405s } = require('../errors/');
 
 usersRouter.param('username', (req, res, next) => {
-  // if (/[?]/gi.test(req.params.username)) return next({ status: 400 });
+  //  if (/[?]/gi.test(req.params.username)) return next({ status: 400 });
   next();
 });
 
