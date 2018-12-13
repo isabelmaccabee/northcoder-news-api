@@ -519,7 +519,7 @@ describe('/api', () => {
           const newComment = {
             user_id: 1,
             body: 'What a great article, really love it'
-          }
+          };
           return request.post(`${articlesURL}/1/comments`).send(newComment).expect(201).then(({body}) => {
             expect(body.comment).to.have.keys(['user_id', 'body', 'article_id', 'comment_id', 'created_at', 'votes'])
           })

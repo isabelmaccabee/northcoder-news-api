@@ -18,7 +18,7 @@ exports.getCommentsByArticleId = (req, res, next) => checkArticleExists(req.para
       .offset(offsetAmount);
   })
   .then((comments) => {
-    if (comments.length === 0) return next({ status: 404 });
+    // if (comments.length === 0) return next({ status: 404 });
     res.status(200).send({ comments });
   })
   .catch(next);
