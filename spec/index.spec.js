@@ -53,7 +53,7 @@ describe('/api', () => {
           expect(topic).to.have.keys(['slug', 'description']);
         });
       }));
-    it('POST / responds with 201 and added article with ID', () => {
+    it('POST / responds with 201 and added topic with ID', () => {
       const newTopic = {
         slug: 'dogs',
         description: 'All about dogs',
