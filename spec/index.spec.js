@@ -1,12 +1,10 @@
 process.env.NODE_ENV = 'test';
-const { expect, dateTime } = require('chai');
+const { expect } = require('chai');
 const supertest = require('supertest');
 const app = require('../app');
 const connection = require('../db/connection');
 
 const request = supertest(app);
-
-//An updated to the articles/:article_id/comments section means it now passes the tests but throws up an error, I'm unsure why unfortuantely
 
 describe('/api', () => {
   beforeEach(() => connection.migrate
@@ -22,7 +20,7 @@ describe('/api', () => {
       expect(body.endpoints).to.be.an('object');
       expect(body.endpoints).to.have.keys(['/api/topics', '/api/topics/:topic/articles', '/api/articles', '/api/articles/:article_id', '/api/articles/:article_id/comments', '/api/articles/:article_id/comments/:comment_id', '/api/users', '/api/users/:username'])
       for (let endpoint in body.endpoints) {
-        expect(body.endpoints[endpoint]).to.have.keys(['methods', 'description'])
+        expect(body.endpoints[endpoint]).to.have.keys(['methods']);
       }
     }));
   it('GET /* responds with 404 and "Page not found" error message', () => request
@@ -132,20 +130,12 @@ describe('/api', () => {
             });
           });
       });
-      // could return to add more expects below
       it('GET /:topic/articles with valid but non-existent query params are ignored and give 200', () => request
         .get(`${topicsURL}/mitch/articles?yellow=true`)
         .expect(200)
         .then(({ body }) => {
           expect(body.articles.length).to.equal(10);
         }));
-      // FINISH THE ONE BELOW
-      // it('GET /:topc/articles with valid query to get only those by a column value succeeds with 200 ', () => request
-      //   .get(`${topicsURL}/mitch/articles?author=icellusedkars`)
-      //   .expect(200)
-      //   .then(({ body }) => {
-      //     expect(body.articles.length).to.equal(6);
-      //   }));
       it('QUERIES: GET /:topic/articles responds with 200 and correct no. of results if limit query specified', () => {
         request
           .get(`${topicsURL}/mitch/articles?limit=5`)
@@ -161,7 +151,7 @@ describe('/api', () => {
           .get(`${topicsURL}/mitch/articles?sort_ascending=true`)
           .expect(200)
           .then(({ body }) => {
-            expect(body.articles[0].article_id).to.equal(12); // or 3
+            expect(body.articles[0].article_id).to.equal(12); 
             expect(body.articles[9].article_id).to.equal(2);
           });
       });
@@ -171,7 +161,6 @@ describe('/api', () => {
         .then(({ body }) => {
           expect(body.articles[0].article_id).to.equal(12);
         }));
-      // BELOW NEEDS WORK
       it('QUERIES: GET /:topic/articles responds with 200 and correct sort criteria if sort_by specified (and default is desc)', () => {
         return request
           .get(`${topicsURL}/mitch/articles?sort_by=title`)
@@ -189,7 +178,7 @@ describe('/api', () => {
             expect(body.articles[0].article_id).to.equal(1);
             expect(body.articles[9].article_id).to.equal(11);
           });
-      })
+      });
       it('ERROR: GET /:topic/articles with valid but non-existent param responds w 404 and error msg', () => {
         request
           .get(`${topicsURL}/horses/articles`)
@@ -210,7 +199,7 @@ describe('/api', () => {
       });
       it('ERROR: GET /:topic/articles with wrong data type for limit or p value returns 400', () => {
         request.get(`${topicsURL}/horses/articles?limit=hello`).expect(400).then(({ body }) => {
-          expect(body.message).to.equal('Invalid data type.')
+          expect(body.message).to.equal('Invalid data type.');
         });
       });
       it('POST /:topic/articles responds with 201 and posted article with id', () => {
@@ -338,7 +327,7 @@ describe('/api', () => {
           expect(body.articles[3].topic).to.equal('mitch');
           expect(body.articles[4].topic).to.equal('cats');
         });
-    })
+    });
     it('ERROR: DELETE, PATCH and PUT on / responds w 405 and "Method not valid" message', () => {
       const invalidMethods = ['delete', 'patch', 'put'];
       return Promise.all(
@@ -415,7 +404,7 @@ describe('/api', () => {
         const increaseVotes = {
           inc_votes: 'increase by one please',
         };
-        return request.patch(`${articlesURL}/helloworld`).send(increaseVotes).expect(400).then(({body}) => {
+        return request.patch(`${articlesURL}/helloworld`).send(increaseVotes).expect(400).then(({ body }) => {
           expect(body.message).to.equal('Invalid data type.');
         });
       });
@@ -459,14 +448,13 @@ describe('/api', () => {
             })),
         );
       });
-      // Could return to check comments deleted too
       it('DELETE /:article_id responds with 204 and empty object', () => {
         return request.delete(`${articlesURL}/1`).expect(204).then(({ body }) => {
           expect(Object.keys(body).length).to.equal(0);
         }).then(() => {
           return request.get(`${articlesURL}/1`).expect(404).then(({ body }) => {
-            expect(body.message).to.equal('Page not found.')
-          })
+            expect(body.message).to.equal('Page not found.');
+          });
         });
       });
       it('ERROR: DELETE /:article_id on valid but non-existent responds with 404 and err msg', () => {
@@ -486,16 +474,15 @@ describe('/api', () => {
             expect(body.comments.length).to.equal(10);
             expect(body.comments[0].comment_id).to.equal(14);
             body.comments.forEach((comment) => {
-              expect(comment).to.have.keys(['comment_id', 'votes', 'author', 'body', 'created_at'])
-              expect(comment.author).to.be.a('string')
-            })
+              expect(comment).to.have.keys(['comment_id', 'votes', 'author', 'body', 'created_at']);
+              expect(comment.author).to.be.a('string');
+            });
           });
         });
         it('QUERIES: GET /:article_id/comments responds w 200 and comments when sort_ascending specified to true', () => {
           return request.get(`${articlesURL}/1/comments?sort_ascending=true`).expect(200).then(({ body }) => {
             expect(body.comments[0].comment_id).to.equal(15);
-            expect(body.comments[2].created_at).to.equal('2017-06-02T23:00:00.000Z')
-            // Can't test for other ones ebcause all are same date
+            expect(body.comments[2].created_at).to.equal('2017-06-02T23:00:00.000Z');
           });
         });
         it('QUERIES: GET /:article_id/comments responds w 200 and correct no, of comments when limit specified', () => {
@@ -506,29 +493,28 @@ describe('/api', () => {
         it('QUERIES: GET /:article_id/comments responds with 200 and ordered by specific column when sort_by specified ', () => {
           return request.get(`${articlesURL}/1/comments?sort_by=votes`).expect(200).then(({ body }) => {
             expect(body.comments[0].comment_id).to.equal(1);
-            // expect(body.comments[9].comment_id).to.equal()
           });
         });
         it('QUERIES: GET /:article_id/comments responds with 200 and p is specified', () => {
-          return request.get(`${articlesURL}/1/comments?p=2`).expect(200).then(({body}) => {
+          return request.get(`${articlesURL}/1/comments?p=2`).expect(200).then(({ body }) => {
             expect(body.comments.length).to.equal(3);
-            expect(body.comments[2].comment_id).to.equal(15)
-          })
+            expect(body.comments[2].comment_id).to.equal(15);
+          });
         });
         it('POST /:article_id/comments responds with 201 and responds with added comment', () => {
           const newComment = {
             user_id: 1,
-            body: 'What a great article, really love it'
+            body: 'What a great article, really love it',
           };
-          return request.post(`${articlesURL}/1/comments`).send(newComment).expect(201).then(({body}) => {
-            expect(body.comment).to.have.keys(['user_id', 'body', 'article_id', 'comment_id', 'created_at', 'votes'])
-          })
+          return request.post(`${articlesURL}/1/comments`).send(newComment).expect(201).then(({ body }) => {
+            expect(body.comment).to.have.keys(['user_id', 'body', 'article_id', 'comment_id', 'created_at', 'votes']);
+          });
         });
         it('ERROR POST /:article_id/comments responds with 400 if user_id in body is non-existent', () => {
           const newComment = {
             user_id: 20,
-            body: 'What a great article, really love it'
-          }
+            body: 'What a great article, really love it',
+          };
           return request.post(`${articlesURL}/1/comments`).send(newComment).expect(400).then(({ body }) => {
             expect(body.message).to.equal('Malformed request, user does not exist');
           });
@@ -536,8 +522,8 @@ describe('/api', () => {
         it('ERROR POST /:article_id/comments responds with 400 non-existent column is referenced in body', () => {
           const newComment = {
             helloworld: 1,
-            body: 'What a great article, really love it'
-          }
+            body: 'What a great article, really love it',
+          };
           return request.post(`${articlesURL}/1/comments`).send(newComment).expect(400).then(({ body }) => {
             expect(body.message).to.equal('Malformed request, column does not exist');
           });
@@ -560,32 +546,23 @@ describe('/api', () => {
             const downByOn = {
               inc_votes: -2,
             };
-            return Promise.all([request.patch(`${articlesURL}/1/comments/1`).send(upByOne).expect(200).then(({body}) => {
+            return Promise.all([request.patch(`${articlesURL}/1/comments/1`).send(upByOne).expect(200).then(({ body }) => {
               expect(body.comment.votes).to.equal(101)
-            }), request.patch(`${articlesURL}/1/comments/1`).send(downByOn).expect(200).then(({body}) => {
+            }), request.patch(`${articlesURL}/1/comments/1`).send(downByOn).expect(200).then(({ body }) => {
               expect(body.comment.votes).to.equal(99)
             })]);
           });
           it('ERROR: PATCH /:comment_id responds with valid but non-existent comment id 404 and err code', () => {
-            const upByOne = {
-              inc_votes: 1,
-            };
             return request.patch(`${articlesURL}/1/comments/20`).expect(404).then(({ body }) => {
               expect(body.message).to.equal('Page not found.')
             }); 
           });
           it('ERROR: PATCH /:comment_id responds with invalid id gives 400 and err msg ', () => {
-            const upByOne = {
-              inc_votes: 1,
-            };
             return request.patch(`${articlesURL}/1/comments/helloworld`).expect(400).then(({ body }) => {
               expect(body.message).to.equal('Invalid data type.')
             }); 
           });
           it('ERROR: PATCH /:comment_id where /:article_id is valid but non-existent (comment_id is valid though) responds w 404 and err msg', () => {
-            const upByOne = {
-              inc_votes: 1,
-            };
             return request.patch(`${articlesURL}/20/comments/1`).expect(404).then(({ body }) => {
               expect(body.message).to.equal('Page not found.')
             }); 
@@ -619,12 +596,12 @@ describe('/api', () => {
             });
           });
           it('ERROR: DELETE /:comment_id with valid but non-existent id responds with 404 and err msg', () => {
-            return request.delete(`${articlesURL}/1/comments/20`).expect(404).then(({body}) => {
+            return request.delete(`${articlesURL}/1/comments/20`).expect(404).then(({ body }) => {
               expect(body.message).to.equal('Page not found.')
             })
           });
           it('ERROR: DELETE /:comment_id with valid but no-existent article_id (but existent comment_id) responds with 404 and err msg', () => {
-            return request.delete(`${articlesURL}/20/comments/1`).expect(404).then(({body}) => {
+            return request.delete(`${articlesURL}/20/comments/1`).expect(404).then(({ body }) => {
               expect(body.message).to.equal("Page not found.")
             })
           })
@@ -683,11 +660,6 @@ describe('/api', () => {
         .then(({ body }) => {
           expect(body.message).to.equal('Page not found.');
         }));
-      // it('ERROR: GET /:username with invalid param type responds w 400 and err msg', () => {
-      //   return request.get(`${usersURL}/hello?`).expect(400).then(({ body }) => {
-      //     expect(body.message).to.equal('Invalid data type.')
-      //   })
-      // });
       it('ERROR: DELETE, PUT, PATCH and POST on /:username responds with 405 and err msg', () => {
         const invalidMethods = ['put', 'post', 'delete', 'patch'];
         return Promise.all(

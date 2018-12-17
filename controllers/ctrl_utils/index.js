@@ -1,13 +1,6 @@
 const knex = require('../../db/connection');
 
 exports.validateQueries = (rawQuery, ...validQueries) => {
-  // const rawQueryArray = Object.keys(rawQueries);
-  // return validQueries.reduce((acc, validQuery) => {
-  //   if (rawQueryArray.includes(validQuery)) {
-  //     acc[validQuery] = rawQueries[validQuery];
-  //   }
-  //   return acc;
-  // }, {});
   if (validQueries.includes(rawQuery)) return rawQuery;
   return 'created_at';
 };

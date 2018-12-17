@@ -61,8 +61,6 @@ exports.updateCommentById = (req, res, next) => checkArticleExists(req.params.ar
   })
   .catch(next);
 
-// could make into utils function
-
 exports.deleteCommentById = (req, res, next) => checkArticleExists(req.params.article_id)
   .then((id) => {
     if (id.length === 0) return Promise.reject({ status: 404 });
