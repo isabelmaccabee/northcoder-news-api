@@ -10,7 +10,7 @@ This is the back-end API for the Front-End https://northcoder-news.netlify.com. 
 
 ## How to use
 
-Clone this repo from github (git clone [repo url here]) and navigate (cd) into it. Using CLI, execute the 'npm install' command to install all the relevant dependencies. From there, you can run 'npm test' if you want to run the test suite. The URL for the hosted API is https://northcoder-news-api.herokuapp.com/api/, on which you can visit the endpoints below using the specified methods.
+Clone this repo from github and navigate (cd) into it. Using CLI, execute the 'npm install' command to install all the relevant dependencies. From there, you can run 'npm test' if you want to run the test suite. The URL for the hosted API is https://northcoder-news-api.herokuapp.com/api/, on which you can visit the endpoints below using the specified methods.
 
 ## Valid HTTP methods on each endpoint
 
